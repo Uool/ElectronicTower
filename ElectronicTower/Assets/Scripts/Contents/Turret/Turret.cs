@@ -6,9 +6,10 @@ public class Turret : MonoBehaviour
 {
     public TurretData turretData;
     public Transform partToRotate;
+    public Transform firePoint;
 
     [HideInInspector] public Transform target;
-    private float fireCountDown = 1f;
+    private float _fireCountDown = 1f;
 
     // Start is called before the first frame update
     void Start()
@@ -24,12 +25,12 @@ public class Turret : MonoBehaviour
 
         UpdateTurretHead();
 
-        if (fireCountDown <= 0f)
+        if (_fireCountDown <= 0f)
         {
             Shoot();
-            fireCountDown = 1f / turretData.FireRate;
+            _fireCountDown = 1f / turretData.FireRate;
         }
-        fireCountDown -= Time.deltaTime;
+        _fireCountDown -= Time.deltaTime;
     }
 
     private void OnDrawGizmosSelected()
