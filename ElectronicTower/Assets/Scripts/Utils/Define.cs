@@ -59,4 +59,10 @@ public class Define
     {
         QuarterView,
     }
+    public enum ETurretType
+    { 
+        MachineGun,
+        Rocket,
+        Laser,
+    }
 }

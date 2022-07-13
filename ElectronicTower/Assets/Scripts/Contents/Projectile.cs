@@ -8,6 +8,8 @@ public class Projectile : MonoBehaviour
     private Transform _target;
     private float _damage;
 
+    public GameObject impactEffect;
+    public float explosionRadius;
     public float speed = 70f;
 
     public void Init(GameObject owner, Transform target, float damage)
@@ -41,10 +43,41 @@ public class Projectile : MonoBehaviour
     void HitTarget()
     {
         // TODO : 이팩트 생성
+        //Managers.Resource.Instantiate();
 
-        Health targetHealth = _target.GetComponent<Health>();
+        
         //TODO : 타겟 체력 줄어들기.
         //targetHealth.TakeDamage(_damage, _owner);
+
+        if (explosionRadius > 0f)
+        {
+            Explosion();
+        }
+        else
+        {
+            Health targetHealth = _target.GetComponent<Health>();
+
+        }
+
         Managers.Resource.Destroy(gameObject);
+    }
+
+    void Explosion()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
+        foreach (Collider target in colliders)
+        {
+            if (target.tag == "Enemy")
+            {
+                Health targetHealth = target.GetComponent<Health>();
+                //target.TakeDamage(_damage, _owner);
+            }
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, explosionRadius);
     }
 }
