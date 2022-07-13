@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Turret : MonoBehaviour
+public abstract class Turret : MonoBehaviour
 {
     public TurretData turretData;
     public Transform partToRotate;
@@ -41,7 +41,7 @@ public class Turret : MonoBehaviour
 
     #region virtual
 
-    protected virtual void Shoot() { }
+    protected abstract void Shoot();
 
     #endregion
 

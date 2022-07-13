@@ -15,4 +15,9 @@ public class MachineGun : Turret
     {
         
     }
+
+    protected override void Shoot()
+    {
+
+    }
 }
