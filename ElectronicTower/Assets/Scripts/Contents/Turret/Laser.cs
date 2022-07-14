@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Laser : Turret
+public class Laser : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -15,7 +15,7 @@ public class Laser : Turret
     {
         
     }
-    protected override void Shoot()
+    void Shoot()
     {
         
     }

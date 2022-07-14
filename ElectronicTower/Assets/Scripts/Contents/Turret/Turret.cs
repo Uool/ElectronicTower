@@ -2,18 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Turret : MonoBehaviour
+public class Turret : MonoBehaviour
 {
     public TurretData turretData;
+    public Transform targetAimBase;
     public Transform partToRotate;
     public Transform firePoint;
 
     [HideInInspector] public Transform target;
     private float _fireCountDown = 1f;
+    private ParticleSystem _projectile;
 
     // Start is called before the first frame update
     void Start()
     {
+        _projectile = Managers.Resource.Instantiate(turretData.projectile.gameObject, firePoint).GetComponent<ParticleSystem>();
+        _projectile.GetComponentInChildren<ProjectileEffect>().Init(gameObject, turretData.Damage, turretData.Type);
+
         InvokeRepeating("UpdateTarget", 0f, 0.5f);
     }
 
@@ -39,30 +44,47 @@ public abstract class Turret : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, turretData.Range);
     }
 
-    #region virtual
-
-    protected abstract void Shoot();
-
-    #endregion
+    // Todo : 조금 더 생각해보자..
+    void Shoot()
+    {
+        _projectile.Play();
+        // TODO : 사운드
+    }
 
     #region Function
 
-    // TODO: 어떻게 적을 찾지? 충돌체크 말고?? (영상 방식은 매번 찾는데 부하가 심할 듯 싶다.
     void UpdateTarget()
     {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, turretData.Range);
+        float shortDistance = Mathf.Infinity;
+        Transform nearestEnemy = null;
 
+        if (colliders.Length == 0)
+        {
+            target = null;
+            return;
+        }
+
+        foreach (Collider enemy in colliders)
+        {
+            float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
+            if (distanceToEnemy < shortDistance)
+            {
+                shortDistance = distanceToEnemy;
+                nearestEnemy = enemy.transform;
+            }
+        }
+        if (nearestEnemy != null && shortDistance <= turretData.Range)
+            target = nearestEnemy;
     }
 
-    // 타겟을 조준한다.
     void UpdateTurretHead()
     {
-        Vector3 dir = (target.position - transform.position);
+        Vector3 dir = (target.position - targetAimBase.position);
         Quaternion lookRotation = Quaternion.LookRotation(dir);
         Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turretData.TurnSpeed).eulerAngles;
-        partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+        partToRotate.rotation = Quaternion.Euler(rotation.x, rotation.y, 0f);
     }
-
-    
 
     #endregion
 }

@@ -3,6 +3,10 @@ using System.Collections;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [Header("EnemyList")]
+    public string[] enemyName;
+
+    [Space(5)]
     public Transform enemyPrefab;
     public Transform spawnPoint;    // starting point
     public float timeBetweenWaves = 5f; // 웨이브와 웨이브 사이의 간격
@@ -33,6 +37,7 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        Managers.Resource.Instantiate($"Enemy/{enemyPrefab.name}", spawnPoint);
+        GameObject enemy = Managers.Resource.Instantiate($"Enemy/{enemyPrefab.name}");
+        enemy.transform.position = spawnPoint.position;
     }
 }
