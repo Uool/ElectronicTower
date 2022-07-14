@@ -1,24 +1,35 @@
 
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BuildManager
 {
-    
-    private GameObject _turretToBuild;
-
     [HideInInspector] public GameObject[] turretPrefabs;
+    public bool CanBuild { get { return _turretToBuild != null; }}
 
-    public void Init()
+    public UnityAction OnPurchase;
+    private TurretShopData _turretToBuild;
+    
+    public void SelectTurretToBuild(TurretShopData turretData)
     {
-        string[] turretNames = System.Enum.GetNames(typeof(Define.ETurretType));
-        turretPrefabs = new GameObject[turretNames.Length];
-        for (int i = 0; i < turretNames.Length; i++)
+        if (Managers.Player.money >= turretData.cost)
         {
-            turretPrefabs[i] = Managers.Resource.Load<GameObject>($"Prefabs/Turret/{turretNames[i]}");
+            _turretToBuild = turretData;
+        }
+        else
+        {
+            return;
         }
     }
 
-    public GameObject GetTurretToBuild() { return _turretToBuild; }
-    
-    public void SetTurretToBuild(GameObject turret) { _turretToBuild = turret; }
+    public GameObject BuildTurretOn(Node node)
+    {
+        Managers.Player.money -= _turretToBuild.cost;
+        GameObject turret = Managers.Resource.Instantiate(_turretToBuild.turretPrefab, node.transform);
+        turret.transform.position = node.GetBuildPosition();
+
+        if (OnPurchase != null) OnPurchase.Invoke();
+
+        return turret;
+    }
 }

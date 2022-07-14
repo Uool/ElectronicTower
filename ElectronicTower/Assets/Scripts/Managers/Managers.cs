@@ -10,7 +10,9 @@ public class Managers : MonoBehaviour
     #region Content
 
     BuildManager _build = new BuildManager();
+    PlayerStat _player = new PlayerStat();
     public static BuildManager Build { get { return Instance._build; } }
+    public static PlayerStat Player { get { return Instance._player; } }
     #endregion
 
     #region Core
@@ -51,8 +53,6 @@ public class Managers : MonoBehaviour
             s_instance._data.Init();
             s_instance._pool.Init();
             s_instance._sound.Init();
-
-            s_instance._build.Init();
         }		
 	}
 
