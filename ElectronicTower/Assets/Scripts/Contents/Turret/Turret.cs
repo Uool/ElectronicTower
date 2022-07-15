@@ -2,22 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Poolable))]
 public class Turret : MonoBehaviour
 {
     public TurretData turretData;
     public Transform targetAimBase;
     public Transform partToRotate;
     public Transform firePoint;
-
     [HideInInspector] public Transform target;
+
     private float _fireCountDown = 1f;
     private ParticleSystem _projectile;
 
     // Start is called before the first frame update
     void Start()
     {
-        _projectile = Managers.Resource.Instantiate(turretData.projectile.gameObject, firePoint).GetComponent<ParticleSystem>();
-        _projectile.GetComponentInChildren<ProjectileEffect>().Init(gameObject, turretData.Damage, turretData.Type);
+        if (turretData.Type == Define.ETurretType.Laser)
+        {
+            _projectile = Managers.Resource.Instantiate(turretData.projectile.gameObject, firePoint).GetComponent<ParticleSystem>();
+            _projectile.GetComponentInChildren<ProjectileEffect>().Init(gameObject, turretData.Damage, turretData.Type);
+        }
 
         InvokeRepeating("UpdateTarget", 0f, 0.5f);
     }
@@ -44,10 +48,19 @@ public class Turret : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, turretData.Range);
     }
 
-    // Todo : 조금 더 생각해보자..
+    // Todo : 조금 더 생각해보자...
     void Shoot()
     {
-        _projectile.Play();
+        if (turretData.Type == Define.ETurretType.Laser)
+        {
+            if (_projectile.isPlaying == false)
+                _projectile.Play();
+        }
+        else
+        {
+            Managers.Resource.Instantiate(turretData.projectile.gameObject, firePoint);
+        }
+
         // TODO : 사운드
     }
 
@@ -55,17 +68,20 @@ public class Turret : MonoBehaviour
 
     void UpdateTarget()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, turretData.Range);
+        List<Enemy> enemyList = Managers.Game.enemyList;
         float shortDistance = Mathf.Infinity;
         Transform nearestEnemy = null;
 
-        if (colliders.Length == 0)
+        if (enemyList.Count == 0)
         {
             target = null;
+            if (_projectile.isPlaying)
+                _projectile.Stop();
+
             return;
         }
-
-        foreach (Collider enemy in colliders)
+        
+        foreach (Enemy enemy in enemyList)
         {
             float distanceToEnemy = Vector3.Distance(transform.position, enemy.transform.position);
             if (distanceToEnemy < shortDistance)

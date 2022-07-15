@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 541b06503b9c87349b24da9b29d92997, type: 3}
+  m_Name: LaserShop
+  m_EditorClassIdentifier: 
+  turretPrefab: {fileID: 2498982950911167318, guid: 77f78c10d8e541e469af88642d2024e9, type: 3}
+  cost: 200

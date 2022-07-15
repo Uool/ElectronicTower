@@ -4,11 +4,9 @@ using UnityEngine.Events;
 
 public class BuildManager
 {
-    [HideInInspector] public GameObject[] turretPrefabs;
-    public bool CanBuild { get { return _turretToBuild != null; }}
-
-    public UnityAction OnPurchase;
     private TurretShopData _turretToBuild;
+
+    public bool CanBuild { get { return _turretToBuild != null; }}
     
     public void SelectTurretToBuild(TurretShopData turretData)
     {
@@ -27,8 +25,8 @@ public class BuildManager
         Managers.Player.money -= _turretToBuild.cost;
         GameObject turret = Managers.Resource.Instantiate(_turretToBuild.turretPrefab, node.transform);
         turret.transform.position = node.GetBuildPosition();
-
-        if (OnPurchase != null) OnPurchase.Invoke();
+        // TODO : 터렛을 건설했을 시 변화될 UI를 이벤트에 넣어야 함.
+        //Managers.Resource.Instantiate(, node.transform);
 
         return turret;
     }

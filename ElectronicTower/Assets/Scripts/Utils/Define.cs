@@ -4,61 +4,27 @@ using UnityEngine;
 
 public class Define
 {
-    public enum WorldObject
+    public enum EScene
     {
         Unknown,
-        Player,
-        Monster,
-    }
-
-	public enum State
-	{
-		Die,
-		Moving,
-		Idle,
-		Skill,
-	}
-
-    public enum Layer
-    {
-        Monster = 8,
-        Ground = 9,
-        Block = 10,
-    }
-
-    public enum Scene
-    {
-        Unknown,
-        Login,
-        Lobby,
+        Title,
+        StageSelect,
         Game,
     }
 
-    public enum Sound
+    public enum ESound
     {
         Bgm,
         Effect,
         MaxCount,
     }
 
-    public enum UIEvent
+    public enum EUIEvent
     {
         Click,
         Drag,
     }
 
-    public enum MouseEvent
-    {
-        Press,
-        PointerDown,
-        PointerUp,
-        Click,
-    }
-
-    public enum CameraMode
-    {
-        QuarterView,
-    }
     public enum ETurretType
     { 
         MachineGun,

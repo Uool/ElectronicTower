@@ -37,7 +37,7 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
-        GameObject enemy = Managers.Resource.Instantiate($"Enemy/{enemyPrefab.name}");
+        Enemy enemy = Managers.Game.EnemySpawn($"Enemy/{enemyPrefab.name}");
         enemy.transform.position = spawnPoint.position;
     }
 }

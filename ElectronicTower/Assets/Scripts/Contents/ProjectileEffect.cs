@@ -37,7 +37,7 @@ public class ProjectileEffect : MonoBehaviour
         Collider[] colliders = Physics.OverlapSphere(transform.position, _explosionRad);
         foreach (Collider target in colliders)
         {
-            if (target.tag == "Enemy")
+            if (target.tag == _enemyTag)
             {
                 Health targetHealth = target.GetComponent<Health>();
                 targetHealth.TakeDamage(_damage, _owner);

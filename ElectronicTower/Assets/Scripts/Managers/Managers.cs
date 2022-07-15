@@ -11,8 +11,10 @@ public class Managers : MonoBehaviour
 
     BuildManager _build = new BuildManager();
     PlayerStat _player = new PlayerStat();
+    GameManagerEx _game = new GameManagerEx();
     public static BuildManager Build { get { return Instance._build; } }
     public static PlayerStat Player { get { return Instance._player; } }
+    public static GameManagerEx Game { get { return Instance._game; } }
     #endregion
 
     #region Core
