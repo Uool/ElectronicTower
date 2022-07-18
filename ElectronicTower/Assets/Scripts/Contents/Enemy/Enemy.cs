@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     private Health _health;
     private Transform _target;
     private int _wavePointIndex = 0;
+    private float _currentSpeed;
 
     private readonly float minDistance = 0.2f;
 
@@ -24,17 +25,24 @@ public class Enemy : MonoBehaviour
         _target = WayPoints.points[0];
         _health.SetMaxHealth(enemyData.MaxHp);
         _wavePointIndex = 0;
+        _currentSpeed = enemyData.MoveSpeed;
     }
 
     void Update()
     {
         Vector3 dir = (_target.position - transform.position).normalized;
-        transform.Translate(dir * enemyData.MoveSpeed * Time.deltaTime, Space.World);
+        transform.Translate(dir * _currentSpeed * Time.deltaTime, Space.World);
 
         if ((_target.position - transform.position).sqrMagnitude < minDistance * minDistance)
         {
             GetNextWayPoint();
         }
+        _currentSpeed = enemyData.MoveSpeed;
+    }
+
+    public void SlowSpeed(float percent)
+    {
+        _currentSpeed = enemyData.MoveSpeed * percent;
     }
 
     void GetNextWayPoint()
@@ -56,4 +64,6 @@ public class Enemy : MonoBehaviour
         Managers.Player.money += enemyData.Money;
         Managers.Game.EnemyDespawn(this);
     }
+
+    
 }

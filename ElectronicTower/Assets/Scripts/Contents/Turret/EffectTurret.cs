@@ -10,8 +10,7 @@ public class EffectTurret : Turret
     {
         base.Init();
         _projectile = Managers.Resource.Instantiate(turretData.projectile.gameObject, firePoint).GetComponent<ParticleSystem>();
-        _projectile.GetComponent<ProjectileEffect>().Init(gameObject, turretData.Damage, turretData.Type);
-
+        _projectile.GetComponent<ProjectileEffect>().Init(gameObject, turretData.Damage, turretData.SlowMultiplier, turretData.Type);
     }
 
     protected override void Shoot()

@@ -7,11 +7,13 @@ public class ProjectileEffect : MonoBehaviour
 
     private float _damage;
     private string _enemyTag = "Enemy";
+    private float _slowMultiplier = 0.2f;
 
-    public void Init(GameObject owner, float damage, Define.ETurretType type)
+    public void Init(GameObject owner, float damage, float multiplier, Define.ETurretType type)
     {
         _owner = owner;
         _damage = damage;
+        _slowMultiplier = multiplier;
         _type = type;
     }
 
@@ -22,7 +24,10 @@ public class ProjectileEffect : MonoBehaviour
             if (other.GetComponent<Health>())
             {
                 if (_type == Define.ETurretType.Laser)
+                {
                     other.GetComponent<Health>().TakeDamage(_damage * Time.deltaTime, other);
+                    other.GetComponent<Enemy>().SlowSpeed(_slowMultiplier);
+                }
             }
         }
     }
