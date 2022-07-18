@@ -6,7 +6,7 @@ public class GameManagerEx
 {
     public List<Enemy> enemyList = new List<Enemy>();
     public List<Turret> turretList = new List<Turret>();
-
+    public List<PowerPole> powerPoleList = new List<PowerPole>();
     public Enemy EnemySpawn(string path, Transform parent = null)
     {
         Enemy enemy = Managers.Resource.Instantiate(path, parent).GetComponent<Enemy>();
@@ -24,10 +24,32 @@ public class GameManagerEx
         GameObject go = Managers.Resource.Instantiate(turretPrefab, parent);
         Turret turret = go.GetComponent<Turret>();
         turret.Init();
-
         turretList.Add(turret);
 
+        CheckLink();
+
         return go;
+    }
+
+    public GameObject PowerPoleSpawn(GameObject PowerPolePrefab, Transform parent)
+    {
+        GameObject go = Managers.Resource.Instantiate(PowerPolePrefab, parent);
+        PowerPole powerPole = go.GetComponent<PowerPole>();
+        powerPole.Init();
+        powerPoleList.Add(powerPole);
+
+        CheckLink();
+
+        return go;
+    }
+
+    void CheckLink()
+    {
+        foreach (PowerPole pole in powerPoleList)
+        {
+            if (pole.linkedAction != null)
+                pole.linkedAction.Invoke();
+        }
     }
 
     public void EnemyDespawn(Enemy enemy)

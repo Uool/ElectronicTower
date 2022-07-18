@@ -30,5 +30,6 @@ public class Define
         MachineGun,
         Rocket,
         Laser,
+        PowerPole,
     }
 }

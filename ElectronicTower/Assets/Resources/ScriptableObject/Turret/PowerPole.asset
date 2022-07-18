@@ -9,12 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23fa5d34f83a0eb42ae8a72b60719bc9, type: 3}
-  m_Name: Laser
+  m_Script: {fileID: 11500000, guid: 9e97a8830d089884da09a52242f901a3, type: 3}
+  m_Name: PowerPole
   m_EditorClassIdentifier: 
-  projectile: {fileID: 1062685050423962, guid: 7f38f60a173ec7e4cacc9b7af686d87b, type: 3}
-  _type: 2
-  _range: 20
-  _turnSpeed: 10
-  _fireRate: 10
-  _damage: 10
+  _radius: 10

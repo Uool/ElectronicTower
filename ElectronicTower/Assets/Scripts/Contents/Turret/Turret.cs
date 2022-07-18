@@ -9,7 +9,10 @@ public abstract class Turret : MonoBehaviour
     public Transform targetAimBase;
     public Transform partToRotate;
     public Transform firePoint;
+
     [HideInInspector] public Transform target;
+    [HideInInspector] public bool isLinked;
+
 
     private float _fireCountDown = 1f;
     protected abstract void Shoot();
