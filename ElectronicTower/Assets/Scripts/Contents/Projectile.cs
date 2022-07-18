@@ -2,20 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Poolable))]
 public class Projectile : MonoBehaviour
 {
     private GameObject _owner;
     private Transform _target;
+    private Vector3 _originPos;
     private float _damage;
 
     public GameObject impactEffect;
     public float explosionRadius;
-    public float speed = 70f;
+    public float speed = 30f;
 
-    public void Init(GameObject owner, Transform target, float damage)
+    public void OnEnable()
+    {
+        transform.position = _originPos;
+    }
+
+    public void Init(GameObject owner, Transform target, Vector3 originPos, float damage)
     {
         _owner = owner;
         _target = target;
+        _originPos = originPos;
         _damage = damage;
     }
 
@@ -45,10 +53,6 @@ public class Projectile : MonoBehaviour
         // TODO : 이팩트 생성
         //Managers.Resource.Instantiate();
 
-        
-        //TODO : 타겟 체력 줄어들기.
-        //targetHealth.TakeDamage(_damage, _owner);
-
         if (explosionRadius > 0f)
         {
             Explosion();
@@ -56,7 +60,7 @@ public class Projectile : MonoBehaviour
         else
         {
             Health targetHealth = _target.GetComponent<Health>();
-
+            targetHealth.TakeDamage(_damage, _owner);
         }
 
         Managers.Resource.Destroy(gameObject);
@@ -70,7 +74,7 @@ public class Projectile : MonoBehaviour
             if (target.tag == "Enemy")
             {
                 Health targetHealth = target.GetComponent<Health>();
-                //target.TakeDamage(_damage, _owner);
+                targetHealth.TakeDamage(_damage, _owner);
             }
         }
     }

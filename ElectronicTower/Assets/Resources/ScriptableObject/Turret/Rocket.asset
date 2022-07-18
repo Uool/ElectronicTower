@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fa5d34f83a0eb42ae8a72b60719bc9, type: 3}
   m_Name: Rocket
   m_EditorClassIdentifier: 
-  projectile: {fileID: 198602658442864938, guid: 5599f31b19e20c94ca2378f95f7646b2, type: 3}
+  projectile: {fileID: 4277697553395524678, guid: 9d55cc16b8944a741978c95efbd60f59, type: 3}
   _type: 1
   _range: 30
   _turnSpeed: 7

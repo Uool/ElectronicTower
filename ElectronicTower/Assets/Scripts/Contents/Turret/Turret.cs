@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Poolable))]
-public class Turret : MonoBehaviour
+public abstract class Turret : MonoBehaviour
 {
     public TurretData turretData;
     public Transform targetAimBase;
@@ -12,22 +12,14 @@ public class Turret : MonoBehaviour
     [HideInInspector] public Transform target;
 
     private float _fireCountDown = 1f;
-    private ParticleSystem _projectile;
+    protected abstract void Shoot();
 
-    // Start is called before the first frame update
-    void Start()
+    public virtual void Init()
     {
-        if (turretData.Type == Define.ETurretType.Laser)
-        {
-            _projectile = Managers.Resource.Instantiate(turretData.projectile.gameObject, firePoint).GetComponent<ParticleSystem>();
-            _projectile.GetComponentInChildren<ProjectileEffect>().Init(gameObject, turretData.Damage, turretData.Type);
-        }
-
         InvokeRepeating("UpdateTarget", 0f, 0.5f);
     }
 
-    // Update is called once per frame
-    void Update()
+    protected void TurretUpdate()
     {
         if (target == null)
             return;
@@ -42,31 +34,15 @@ public class Turret : MonoBehaviour
         _fireCountDown -= Time.deltaTime;
     }
 
-    private void OnDrawGizmosSelected()
+    protected void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, turretData.Range);
-    }
-
-    // Todo : 조금 더 생각해보자...
-    void Shoot()
-    {
-        if (turretData.Type == Define.ETurretType.Laser)
-        {
-            if (_projectile.isPlaying == false)
-                _projectile.Play();
-        }
-        else
-        {
-            Managers.Resource.Instantiate(turretData.projectile.gameObject, firePoint);
-        }
-
-        // TODO : 사운드
-    }
+    }    
 
     #region Function
 
-    void UpdateTarget()
+    protected void UpdateTarget()
     {
         List<Enemy> enemyList = Managers.Game.enemyList;
         float shortDistance = Mathf.Infinity;
@@ -75,9 +51,6 @@ public class Turret : MonoBehaviour
         if (enemyList.Count == 0)
         {
             target = null;
-            if (_projectile.isPlaying)
-                _projectile.Stop();
-
             return;
         }
         
@@ -94,7 +67,7 @@ public class Turret : MonoBehaviour
             target = nearestEnemy;
     }
 
-    void UpdateTurretHead()
+    protected void UpdateTurretHead()
     {
         Vector3 dir = (target.position - targetAimBase.position);
         Quaternion lookRotation = Quaternion.LookRotation(dir);

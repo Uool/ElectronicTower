@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fa5d34f83a0eb42ae8a72b60719bc9, type: 3}
   m_Name: MechineGun
   m_EditorClassIdentifier: 
-  projectile: {fileID: 198405310834809902, guid: ab32929843ea40d48ae16ecaa85f794a, type: 3}
+  projectile: {fileID: 5087125022182047182, guid: e7c4fc4f4e44ff84285986ae7546c21e, type: 3}
   _type: 0
   _range: 30
   _turnSpeed: 10

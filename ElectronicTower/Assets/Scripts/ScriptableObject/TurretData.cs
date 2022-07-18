@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName ="Object/Turret", fileName ="TurretData")]
 public class TurretData : ScriptableObject
 {
-    public ParticleSystem projectile;
+    public GameObject projectile;
 
     [SerializeField] private Define.ETurretType _type;
     [SerializeField] private float _range;

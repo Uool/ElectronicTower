@@ -6,7 +6,6 @@ public class ProjectileEffect : MonoBehaviour
     private Define.ETurretType _type;
 
     private float _damage;
-    private float _explosionRad = 20f;
     private string _enemyTag = "Enemy";
 
     public void Init(GameObject owner, float damage, Define.ETurretType type)
@@ -24,23 +23,6 @@ public class ProjectileEffect : MonoBehaviour
             {
                 if (_type == Define.ETurretType.Laser)
                     other.GetComponent<Health>().TakeDamage(_damage * Time.deltaTime, other);
-                else if (_type == Define.ETurretType.Rocket)
-                    Explosion();
-                else
-                    other.GetComponent<Health>().TakeDamage(_damage, other);
-            }
-        }
-    }
-
-    void Explosion()
-    {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, _explosionRad);
-        foreach (Collider target in colliders)
-        {
-            if (target.tag == _enemyTag)
-            {
-                Health targetHealth = target.GetComponent<Health>();
-                targetHealth.TakeDamage(_damage, _owner);
             }
         }
     }
