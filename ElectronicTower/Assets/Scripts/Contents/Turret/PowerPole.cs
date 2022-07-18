@@ -7,6 +7,7 @@ using UnityEngine.Events;
 public class PowerPole : MonoBehaviour
 {
     public PowerPoleData poleData;
+    public Transform electroLineTr;
     public GameObject electroArea;
 
     private LineRenderer _lineRenderer;
@@ -15,6 +16,7 @@ public class PowerPole : MonoBehaviour
 
     [HideInInspector] public bool isLinked;
     [HideInInspector] public bool isSupplied;
+    [HideInInspector] public Transform myNode;
     public UnityAction linkedAction;
 
 
@@ -22,6 +24,18 @@ public class PowerPole : MonoBehaviour
     {
         if (_lineRenderer == null)
             _lineRenderer = GetComponent<LineRenderer>();
+
+        if (myNode != null)
+        {
+            _lineRenderer.SetPosition(0, myNode.TransformPoint(electroLineTr.position));
+            _lineRenderer.SetPosition(1, myNode.TransformPoint(electroLineTr.position));
+        }
+    }
+
+    protected void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, poleData.Radius);
     }
 
     public void Init()
@@ -40,6 +54,7 @@ public class PowerPole : MonoBehaviour
                 if (_linkedTurret.Contains(turret) == false)
                 {
                     _linkedTurret.Add(turret);
+                    turret.ConnectedPowerPole(myNode.TransformPoint(electroLineTr.position));
                     turret.isLinked = true;
                 }    
             }
@@ -56,6 +71,7 @@ public class PowerPole : MonoBehaviour
                 if (_linkedPowerPole.Contains(powerPole) == false)
                 {
                     _linkedPowerPole.Add(powerPole);
+                    powerPole.ConnectedPowerPole(myNode.TransformPoint(electroLineTr.position));
                     powerPole.isLinked = true;
                 }
             }
@@ -65,5 +81,15 @@ public class PowerPole : MonoBehaviour
     public void ActiveElectroArea(bool isOn)
     {
         electroArea.SetActive(isOn);
+    }
+
+    public void ConnectedPowerPole(Vector3 position)
+    {
+        _lineRenderer?.SetPosition(1, position);
+    }
+
+    public void DisConnectedPowerPole()
+    {
+        _lineRenderer?.SetPosition(1, myNode.TransformPoint(electroLineTr.position));
     }
 }

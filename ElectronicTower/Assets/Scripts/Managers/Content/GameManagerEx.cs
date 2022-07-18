@@ -23,6 +23,7 @@ public class GameManagerEx
     {
         GameObject go = Managers.Resource.Instantiate(turretPrefab, parent);
         Turret turret = go.GetComponent<Turret>();
+        turret.myNode = parent;
         turret.Init();
         turretList.Add(turret);
 
@@ -35,6 +36,7 @@ public class GameManagerEx
     {
         GameObject go = Managers.Resource.Instantiate(PowerPolePrefab, parent);
         PowerPole powerPole = go.GetComponent<PowerPole>();
+        powerPole.myNode = parent;
         powerPole.Init();
         powerPoleList.Add(powerPole);
 
