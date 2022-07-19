@@ -1,0 +1,24 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class NodeUI : UI_Base
+{
+    private Node _target;
+
+    public override void Init()
+    {
+        
+    }
+
+    public void SetTarget(Node target)
+    {
+        _target = target;
+        _target.transform.position = target.GetBuildPosition();
+    }
+
+    public void Hide()
+    {
+        gameObject.SetActive(false);
+    }
+}

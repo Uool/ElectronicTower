@@ -5,28 +5,40 @@ using UnityEngine.Events;
 public class BuildManager
 {
     private TurretShopData _turretToBuild;
+    private Node _selectedNode;
+    private Define.ETurretType _turretType;
+    private NodeUI _nodeUI;
 
     public bool CanBuild { get { return _turretToBuild != null; }}
-    public Define.ETurretType turretType;
-    
-    public void SelectTurretToBuild(TurretShopData turretData)
+    public Define.ETurretType TurretType { get { return _turretType; } }
+
+    public void SelectNode (Node node)
     {
-        if (Managers.Player.money >= turretData.cost)
+        if (_selectedNode == node)
         {
-            _turretToBuild = turretData;
-        }
-        else
-        {
-            _turretToBuild = null;
+            DeselectNode();
             return;
         }
+
+        _selectedNode = node;
+        _turretToBuild = null;
+
+        if (_nodeUI == null)
+            _nodeUI = Managers.UI.MakeSubItem<NodeUI>(node.transform);
+        _nodeUI.SetTarget(node);
+    }
+
+    public void DeselectNode()
+    {
+        _selectedNode = null;
+        if (null != _nodeUI) _nodeUI.Hide();
     }
 
     public GameObject BuildTurretOn(Node node)
     {
         Managers.Player.money -= _turretToBuild.cost;
         GameObject turretObject = null;
-        if (turretType == Define.ETurretType.PowerPole)
+        if (_turretType == Define.ETurretType.PowerPole)
             turretObject = Managers.Game.PowerPoleSpawn(_turretToBuild.turretPrefab, node.transform);
         else
             turretObject = Managers.Game.TurretSpawn(_turretToBuild.turretPrefab, node.transform);
@@ -38,5 +50,22 @@ public class BuildManager
         //Managers.Resource.Instantiate(, node.transform);
 
         return turretObject;
+    }
+
+    public void SelectTurretToBuild(Define.ETurretType type, TurretShopData turretData)
+    {
+        _turretType = type;
+        if (Managers.Player.money >= turretData.cost)
+        {
+            _turretToBuild = turretData;
+            _selectedNode = null;
+        }
+        else
+        {
+            _turretToBuild = null;
+            return;
+        }
+        if (_nodeUI != null)
+            _nodeUI.Hide();
     }
 }
