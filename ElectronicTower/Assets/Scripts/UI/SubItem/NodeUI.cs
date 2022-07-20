@@ -28,4 +28,10 @@ public class NodeUI : UI_Base
         _target.UpgradeTurret();
         Managers.Build.DeselectNode();
     }
+
+    public void Sell()
+    {
+        _target.SellTurret();
+        Managers.Build.DeselectNode();
+    }
 }

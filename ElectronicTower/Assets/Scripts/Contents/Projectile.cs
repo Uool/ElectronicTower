@@ -37,6 +37,9 @@ public class Projectile : MonoBehaviour
         }
 
         Vector3 dir = _target.position - transform.position;
+        Quaternion rot = Quaternion.LookRotation(dir.normalized);
+        transform.rotation = rot;
+
         float distanceThisFrame = speed * Time.deltaTime;
 
         if (dir.magnitude <= distanceThisFrame)
