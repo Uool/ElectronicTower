@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NodeUI : UI_Base
 {
@@ -20,5 +21,11 @@ public class NodeUI : UI_Base
     public void Hide()
     {
         gameObject.SetActive(false);
+    }
+
+    public void Upgrade()
+    {
+        _target.UpgradeTurret();
+        Managers.Build.DeselectNode();
     }
 }

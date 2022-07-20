@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 541b06503b9c87349b24da9b29d92997, type: 3}
   m_Name: LaserShop
   m_EditorClassIdentifier: 
-  turretPrefab: {fileID: 2498982950911167318, guid: 77f78c10d8e541e469af88642d2024e9, type: 3}
-  cost: 200
+  turretPrefab:
+  - {fileID: 2498982950911167318, guid: 77f78c10d8e541e469af88642d2024e9, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}

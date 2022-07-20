@@ -9,6 +9,7 @@ public class BuildManager
     private Define.ETurretType _turretType;
     private NodeUI _nodeUI;
 
+
     public bool CanBuild { get { return _turretToBuild != null; }}
     public Define.ETurretType TurretType { get { return _turretType; } }
 
@@ -25,6 +26,7 @@ public class BuildManager
 
         if (_nodeUI == null)
             _nodeUI = Managers.UI.MakeSubItem<NodeUI>(node.transform);
+
         _nodeUI.SetTarget(node);
     }
 
@@ -34,38 +36,44 @@ public class BuildManager
         if (null != _nodeUI) _nodeUI.Hide();
     }
 
-    public GameObject BuildTurretOn(Node node)
-    {
-        Managers.Player.money -= _turretToBuild.cost;
-        GameObject turretObject = null;
-        if (_turretType == Define.ETurretType.PowerPole)
-            turretObject = Managers.Game.PowerPoleSpawn(_turretToBuild.turretPrefab, node.transform);
-        else
-            turretObject = Managers.Game.TurretSpawn(_turretToBuild.turretPrefab, node.transform);
+    //public GameObject BuildTurretOn(Node node)
+    //{
+    //    Managers.Player.money -= _turretToBuild.cost;
+    //    GameObject turretObject = null;
+    //    if (_turretType == Define.ETurretType.PowerPole)
+    //        turretObject = Managers.Game.PowerPoleSpawn(_turretToBuild.turretPrefab, node.transform);
+    //    else
+    //        turretObject = Managers.Game.TurretSpawn(_turretToBuild.turretPrefab, node.transform);
 
-        turretObject.transform.position = node.GetBuildPosition();
-        _turretToBuild = null;
+    //    turretObject.transform.position = node.GetBuildPosition();
+    //    _turretToBuild = null;
 
-        // TODO : 터렛을 건설했을 시 변화될 UI를 이벤트에 넣어야 함.
-        //Managers.Resource.Instantiate(, node.transform);
+    //    // TODO : 터렛을 건설했을 시 변화될 UI를 이벤트에 넣어야 함.
+    //    //Managers.Resource.Instantiate(, node.transform);
 
-        return turretObject;
-    }
+    //    return turretObject;
+    //}
 
     public void SelectTurretToBuild(Define.ETurretType type, TurretShopData turretData)
     {
         _turretType = type;
-        if (Managers.Player.money >= turretData.cost)
+        if (Managers.Player.money >= turretData.Cost)
         {
             _turretToBuild = turretData;
             _selectedNode = null;
         }
         else
         {
+            // TODO: 돈이 없다는 Toast를 띄워야 함
             _turretToBuild = null;
             return;
         }
         if (_nodeUI != null)
             _nodeUI.Hide();
+
+        DeselectNode();
     }
+
+    public TurretShopData GetTurretToBuild() { return _turretToBuild; }
+    public void ClearTurretToBuild() { _turretToBuild = null; }
 }

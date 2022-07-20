@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 541b06503b9c87349b24da9b29d92997, type: 3}
   m_Name: RocketShop
   m_EditorClassIdentifier: 
-  turretPrefab: {fileID: 256915220856411483, guid: 29e1be97ddd11f84a8ff08a89b89d691, type: 3}
-  cost: 150
+  turretPrefab:
+  - {fileID: 256915220856411483, guid: 29e1be97ddd11f84a8ff08a89b89d691, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}

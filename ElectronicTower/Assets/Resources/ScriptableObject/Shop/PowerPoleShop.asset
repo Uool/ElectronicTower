@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 541b06503b9c87349b24da9b29d92997, type: 3}
   m_Name: PowerPoleShop
   m_EditorClassIdentifier: 
-  turretPrefab: {fileID: 420290349105105497, guid: bcaef281cb9abba4fa16a66ac6ae6196, type: 3}
-  cost: 100
+  turretPrefab:
+  - {fileID: 420290349105105497, guid: bcaef281cb9abba4fa16a66ac6ae6196, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
