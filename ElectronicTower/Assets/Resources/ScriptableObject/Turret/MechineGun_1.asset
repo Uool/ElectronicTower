@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23fa5d34f83a0eb42ae8a72b60719bc9, type: 3}
-  m_Name: MechineGun
+  m_Name: MechineGun_1
   m_EditorClassIdentifier: 
   projectile: {fileID: 5087125022182047182, guid: e7c4fc4f4e44ff84285986ae7546c21e, type: 3}
   _type: 0
   _range: 30
   _turnSpeed: 10
-  _fireRate: 3
-  _damage: 3
+  _fireRate: 5
+  _slowMultiplier: 0.2
+  _damage: 5
