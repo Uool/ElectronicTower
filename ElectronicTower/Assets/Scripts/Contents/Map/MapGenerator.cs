@@ -22,9 +22,12 @@ public class MapGenerator : MonoBehaviour
     private Queue<Coord> shuffledTileCoords;
 
     Coord centerCoord;
+    Coord startCoord;
+    Coord endCoord;
 
-    public Transform tilePrefab;    // Node
-    public Transform obstaclePrefab;
+    public Transform tilePrefab;        
+    public Transform obstaclePrefab;    // TurretNode
+    public Transform[] waypoints;       // EnemyRoute
     public Vector2 mapSize;
 
     [Range(0,1)]
@@ -52,8 +55,8 @@ public class MapGenerator : MonoBehaviour
         }
         shuffledTileCoords = new Queue<Coord>(Util.SuffleArray(allTileCoords.ToArray(), seed));
 
-        // TODO: 시작지점 AND 종료지점을 알아야 함(startCoord / endCoord)
-
+        startCoord = new Coord(-1, -1);
+        endCoord = new Coord(-1, -1);
         centerCoord = new Coord((int)mapSize.x / 2, (int)mapSize.y / 2);
 
         string holderName = "Generated Map";
@@ -96,6 +99,9 @@ public class MapGenerator : MonoBehaviour
                 currentObstacleCount--;
             }
         }
+
+        // TODO: 시작지점 AND 종료지점을 알아야 함(startCoord / endCoord)
+        FindStartToEndCoord(obstacleMap);
     }
 
     private bool MapIsFullyAccessable(bool[,] obstacleMap, int currentObstacleCount)
@@ -152,5 +158,29 @@ public class MapGenerator : MonoBehaviour
         Coord randomCoord = shuffledTileCoords.Dequeue();
         shuffledTileCoords.Enqueue(randomCoord);
         return randomCoord;
+    }
+
+    void FindStartToEndCoord(bool[,] obstacleMap)
+    {
+        for (int i = 0; i < shuffledTileCoords.Count; i++)
+        {
+            Coord randomCoord;
+            Coord[] arrayCoord = new Coord[shuffledTileCoords.Count];
+            shuffledTileCoords.CopyTo(arrayCoord, 0);
+            randomCoord = arrayCoord[i];
+
+            if (obstacleMap[randomCoord.x,randomCoord.y] == false && ((randomCoord.x == 0 || randomCoord.x == obstacleMap.GetLength(0) - 1) || (randomCoord.y == 0 || randomCoord.y == obstacleMap.GetLength(1) - 1)))
+            {
+                if (startCoord.x != -1 || startCoord.y != -1)
+                    startCoord = randomCoord;
+            }
+        }
+        /* 계획 
+        1. Tile Class를 만듬 [좌표(vector2), 장애물 여부(bool), 시작지점이 정해지고나서 부터의 거리(int)]
+        2. 장애물이 없는 Tile들만 List를 담아둔다.
+        3. 시작지점에서부터 모든 타일들의 거리를 구한다.
+        4. 제일 거리가 먼 놈을 endCoord로 설정한다.
+        5. 이후 거리를 계산한다.
+         */
     }
 }
