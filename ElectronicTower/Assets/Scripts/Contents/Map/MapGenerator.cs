@@ -2,35 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapGenerator : MonoBehaviour
+public struct Coord
 {
-    public struct Coord
+    public int x;
+    public int y;
+    public Coord(int _x, int _y)
     {
-        public int x;
-        public int y;
-        public Coord(int _x, int _y)
-        {
-            x = _x;
-            y = _y;
-        }
-
-        public static bool operator ==(Coord c1, Coord c2) { return c1.x == c2.x && c1.y == c2.y; }
-        public static bool operator !=(Coord c1, Coord c2) { return !(c1 == c2); }
+        x = _x;
+        y = _y;
     }
 
+    public static bool operator ==(Coord c1, Coord c2) { return c1.x == c2.x && c1.y == c2.y; }
+    public static bool operator !=(Coord c1, Coord c2) { return !(c1 == c2); }
+}
+
+public class MapGenerator : MonoBehaviour
+{
+    private Dictionary<Coord, Tile> tiles;
     private List<Coord> allTileCoords;
     private Queue<Coord> shuffledTileCoords;
 
-    Coord centerCoord;
-    Coord startCoord;
-    Coord endCoord;
+    private List<Tile> openList;
+    private List<Tile> closeList;
+    private List<Tile> finalTileList;
 
-    public Transform tilePrefab;        
+    private Coord centerCoord;
+    private Coord startCoord;
+    private Coord endCoord;
+    private Tile curTile;
+
+    public Transform tilePrefab;
     public Transform obstaclePrefab;    // TurretNode
     public Transform[] waypoints;       // EnemyRoute
     public Vector2 mapSize;
 
-    [Range(0,1)]
+    [Range(0, 1)]
     public float outlinePercent;
     [Range(0, 1)]
     public float obstaclePercent;
@@ -44,7 +50,10 @@ public class MapGenerator : MonoBehaviour
 
     public void GenerateMap()
     {
+        tiles = new Dictionary<Coord, Tile>();
         allTileCoords = new List<Coord>();
+        //if (allTileCoords.Count > 0)
+        //    allTileCoords.Clear();
 
         for (int x = 0; x < mapSize.x; x++)
         {
@@ -71,13 +80,16 @@ public class MapGenerator : MonoBehaviour
             for (int y = 0; y < mapSize.y; y++)
             {
                 Vector3 tilePosition = CoordToPosition(x, y);
-                //GameObject newTime = Managers.Resource.Instantiate(tilePrefab.gameObject, tilePosition, Quaternion.Euler(Vector3.right * 90), mapHolder);
-                Transform newTime = Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90), mapHolder) as Transform;
-                newTime.transform.localScale = Vector3.one * (1 - outlinePercent);
+                Coord tileCoord = new Coord(x, y);
+                //GameObject newTile = Managers.Resource.Instantiate(tilePrefab.gameObject, tilePosition, Quaternion.Euler(Vector3.right * 90), mapHolder);
+                Tile newTile = Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90), mapHolder).GetComponent<Tile>();
+                newTile.transform.localScale = Vector3.one * (1 - outlinePercent);
+                newTile.coord = tileCoord;
+                tiles.Add(tileCoord, newTile);
             }
         }
 
-        bool[,] obstacleMap = new bool[(int)mapSize.x, (int)mapSize.y]; 
+        bool[,] obstacleMap = new bool[(int)mapSize.x, (int)mapSize.y];
 
         int obstacleCount = (int)(mapSize.x * mapSize.y * obstaclePercent);
         int currentObstacleCount = 0;
@@ -92,6 +104,9 @@ public class MapGenerator : MonoBehaviour
                 Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
                 //GameObject newObstacle = Managers.Resource.Instantiate(obstaclePrefab.gameObject, obstaclePosition + Vector3.up * 0.5f, Quaternion.identity, mapHolder);
                 Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition + Vector3.up * 0.5f, Quaternion.identity, mapHolder) as Transform;
+
+                if (tiles.ContainsKey(randomCoord))
+                    tiles[randomCoord].isObstcle = true;
             }
             else
             {
@@ -150,7 +165,7 @@ public class MapGenerator : MonoBehaviour
     private Vector3 CoordToPosition(int x, int y)
     {
         return new Vector3(-mapSize.x / 2f + 0.5f + x, 0f, -mapSize.y / 2f + 0.5f + y);
-    }    
+    }
 
     public Coord GetRandomCoord()
     {
@@ -162,25 +177,122 @@ public class MapGenerator : MonoBehaviour
 
     void FindStartToEndCoord(bool[,] obstacleMap)
     {
+        List<Coord> openCoordList = new List<Coord>();
         for (int i = 0; i < shuffledTileCoords.Count; i++)
         {
             Coord randomCoord;
             Coord[] arrayCoord = new Coord[shuffledTileCoords.Count];
+            
             shuffledTileCoords.CopyTo(arrayCoord, 0);
             randomCoord = arrayCoord[i];
 
-            if (obstacleMap[randomCoord.x,randomCoord.y] == false && ((randomCoord.x == 0 || randomCoord.x == obstacleMap.GetLength(0) - 1) || (randomCoord.y == 0 || randomCoord.y == obstacleMap.GetLength(1) - 1)))
+            if (obstacleMap[randomCoord.x, randomCoord.y] == false &&
+                ((randomCoord.x == 0 || randomCoord.x == obstacleMap.GetLength(0) - 1) ||
+                (randomCoord.y == 0 || randomCoord.y == obstacleMap.GetLength(1) - 1)))
             {
-                if (startCoord.x != -1 || startCoord.y != -1)
+                if (startCoord.x == -1 || startCoord.y == -1)
+                {
                     startCoord = randomCoord;
+                    tiles[randomCoord].isStart = true;
+                }
+            }
+            else if (obstacleMap[randomCoord.x, randomCoord.y] == false)
+                openCoordList.Add(randomCoord);
+        }
+
+        int maxLength = 0;
+        foreach (Coord edge in openCoordList)
+        {
+            int length = Mathf.Abs(startCoord.x - edge.x) + Mathf.Abs(startCoord.y - edge.y);
+            if (length > maxLength)
+            {
+                maxLength = length;
+                endCoord = edge;
             }
         }
-        /* 계획 
-        1. Tile Class를 만듬 [좌표(vector2), 장애물 여부(bool), 시작지점이 정해지고나서 부터의 거리(int)]
-        2. 장애물이 없는 Tile들만 List를 담아둔다.
-        3. 시작지점에서부터 모든 타일들의 거리를 구한다.
-        4. 제일 거리가 먼 놈을 endCoord로 설정한다.
-        5. 이후 거리를 계산한다.
-         */
+        tiles[endCoord].isEnd = true;
+
+        PathFinding();
+    }
+
+    void PathFinding()
+    {
+        openList = new List<Tile>() { tiles[startCoord] };
+        closeList = new List<Tile>();
+        finalTileList = new List<Tile>();
+
+        while (openList.Count > 0)
+        {
+            curTile = openList[0];
+
+            for (int i = 1; i < openList.Count; i++)
+            {
+                if (openList[i].F <= curTile.F && openList[i].H < curTile.H)
+                    curTile = openList[i];
+            }
+
+            openList.Remove(curTile);
+            closeList.Add(curTile);
+
+            // 마지막으로 결정된 길의 Tile들을 넣어준다.
+            if (curTile == tiles[endCoord])
+            {
+                Tile targetCurTile = tiles[endCoord];
+                while (targetCurTile != tiles[startCoord])
+                {
+                    finalTileList.Add(targetCurTile);
+                    targetCurTile = targetCurTile.parentTile;
+                }
+                finalTileList.Add(tiles[startCoord]);
+                finalTileList.Reverse();
+
+                waypoints = new Transform[finalTileList.Count];
+                for (int i = 0; i < finalTileList.Count; i++)
+                {
+                    waypoints[i] = finalTileList[i].transform;
+                }
+                return;
+            }
+
+            // 상,좌,하,우
+            OpenListAdd(curTile.coord.x, curTile.coord.y + 1);
+            OpenListAdd(curTile.coord.x + 1, curTile.coord.y);
+            OpenListAdd(curTile.coord.x, curTile.coord.y - 1);
+            OpenListAdd(curTile.coord.x - 1, curTile.coord.y);
+        }
+    }
+
+    void OpenListAdd(int x, int y)
+    {
+        Coord currentCoord = new Coord(x, y);
+
+        // x,y 좌표가 맵 끝을 넘지 않으며, 벽이 아니어야 하고, closeList에 있으면 안됌.
+        if (x >= 0 && x < mapSize.x && y >= 0 && y < mapSize.y &&
+            !tiles[currentCoord].isObstcle && !closeList.Contains(tiles[currentCoord]))
+        {
+            Tile neighborTile = tiles[currentCoord];
+            int moveCost = curTile.G + 10;  // 대각선은 사용하지 않을 예정
+
+            if (moveCost < neighborTile.G || openList.Contains(neighborTile) == false)
+            {
+                neighborTile.G = moveCost;
+                neighborTile.H = Mathf.Abs(neighborTile.coord.x - tiles[endCoord].coord.x) + Mathf.Abs(neighborTile.coord.y - tiles[endCoord].coord.y) * 10;
+                neighborTile.parentTile = curTile;
+
+                openList.Add(neighborTile);
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (waypoints != null && waypoints.Length != 0)
+        {
+            for (int i = 0; i < waypoints.Length - 1; i++)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawLine(waypoints[i].position, waypoints[i + 1].position);
+            }
+        }            
     }
 }
