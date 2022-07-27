@@ -291,7 +291,7 @@ public class MapGenerator : MonoBehaviour
             for (int i = 0; i < waypoints.Length - 1; i++)
             {
                 Gizmos.color = Color.red;
-                Gizmos.DrawLine(waypoints[i].position, waypoints[i + 1].position);
+                Gizmos.DrawLine(waypoints[i].position + Vector3.up * 0.5f, waypoints[i + 1].position + Vector3.up * 0.5f);
             }
         }            
     }
