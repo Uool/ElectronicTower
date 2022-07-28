@@ -7,6 +7,8 @@ public class NodeUI : UI_Base
 {
     private Node _target;
 
+    public enum EButton { Upgrade, Sell }
+
     public override void Init()
     {
         
@@ -15,7 +17,7 @@ public class NodeUI : UI_Base
     public void SetTarget(Node target)
     {
         _target = target;
-        _target.transform.position = target.GetBuildPosition();
+        gameObject.SetActive(true);
     }
 
     public void Hide()

@@ -18,18 +18,18 @@ public struct Coord
 
 public class MapGenerator : MonoBehaviour
 {
-    private Dictionary<Coord, Tile> tiles;
-    private List<Coord> allTileCoords;
-    private Queue<Coord> shuffledTileCoords;
+    private Dictionary<Coord, Tile> _tiles;
+    private List<Coord> _allTileCoords;
+    private Queue<Coord> _shuffledTileCoords;
 
-    private List<Tile> openList;
-    private List<Tile> closeList;
-    private List<Tile> finalTileList;
+    private List<Tile> _openList;
+    private List<Tile> _closeList;
+    private List<Tile> _finalTileList;
 
-    private Coord centerCoord;
-    private Coord startCoord;
-    private Coord endCoord;
-    private Tile curTile;
+    private Coord _centerCoord;
+    private Coord _startCoord;
+    private Coord _endCoord;
+    private Tile _curTile;
 
     public Transform tilePrefab;
     public Transform obstaclePrefab;    // TurretNode
@@ -43,30 +43,28 @@ public class MapGenerator : MonoBehaviour
 
     public int seed = 10;
 
-    private void Start()
+    private void Awake()
     {
         GenerateMap();
     }
 
     public void GenerateMap()
     {
-        tiles = new Dictionary<Coord, Tile>();
-        allTileCoords = new List<Coord>();
-        //if (allTileCoords.Count > 0)
-        //    allTileCoords.Clear();
+        _tiles = new Dictionary<Coord, Tile>();
+        _allTileCoords = new List<Coord>();
 
         for (int x = 0; x < mapSize.x; x++)
         {
             for (int y = 0; y < mapSize.y; y++)
             {
-                allTileCoords.Add(new Coord(x, y));
+                _allTileCoords.Add(new Coord(x, y));
             }
         }
-        shuffledTileCoords = new Queue<Coord>(Util.SuffleArray(allTileCoords.ToArray(), seed));
+        _shuffledTileCoords = new Queue<Coord>(Util.SuffleArray(_allTileCoords.ToArray(), seed));
 
-        startCoord = new Coord(-1, -1);
-        endCoord = new Coord(-1, -1);
-        centerCoord = new Coord((int)mapSize.x / 2, (int)mapSize.y / 2);
+        _startCoord = new Coord(-1, -1);
+        _endCoord = new Coord(-1, -1);
+        _centerCoord = new Coord((int)mapSize.x / 2, (int)mapSize.y / 2);
 
         string holderName = "Generated Map";
         if (transform.Find(holderName))
@@ -74,6 +72,8 @@ public class MapGenerator : MonoBehaviour
 
         Transform mapHolder = new GameObject(holderName).transform;
         mapHolder.parent = transform;
+        mapHolder.gameObject.AddComponent<WayPoints>();
+        mapHolder.gameObject.AddComponent<EnemySpawner>();
 
         for (int x = 0; x < mapSize.x; x++)
         {
@@ -85,7 +85,7 @@ public class MapGenerator : MonoBehaviour
                 Tile newTile = Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90), mapHolder).GetComponent<Tile>();
                 newTile.transform.localScale = Vector3.one * (1 - outlinePercent);
                 newTile.coord = tileCoord;
-                tiles.Add(tileCoord, newTile);
+                _tiles.Add(tileCoord, newTile);
             }
         }
 
@@ -99,14 +99,14 @@ public class MapGenerator : MonoBehaviour
             Coord randomCoord = GetRandomCoord();
             obstacleMap[randomCoord.x, randomCoord.y] = true;
             currentObstacleCount++;
-            if (randomCoord != centerCoord && MapIsFullyAccessable(obstacleMap, currentObstacleCount))
+            if (randomCoord != _centerCoord && MapIsFullyAccessable(obstacleMap, currentObstacleCount))
             {
                 Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
                 //GameObject newObstacle = Managers.Resource.Instantiate(obstaclePrefab.gameObject, obstaclePosition + Vector3.up * 0.5f, Quaternion.identity, mapHolder);
                 Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition + Vector3.up * 0.5f, Quaternion.identity, mapHolder) as Transform;
 
-                if (tiles.ContainsKey(randomCoord))
-                    tiles[randomCoord].isObstcle = true;
+                if (_tiles.ContainsKey(randomCoord))
+                    _tiles[randomCoord].isObstcle = true;
             }
             else
             {
@@ -114,8 +114,7 @@ public class MapGenerator : MonoBehaviour
                 currentObstacleCount--;
             }
         }
-
-        // TODO: 시작지점 AND 종료지점을 알아야 함(startCoord / endCoord)
+        
         FindStartToEndCoord(obstacleMap);
     }
 
@@ -124,9 +123,9 @@ public class MapGenerator : MonoBehaviour
         // Flood Fill (이미 살펴봤던 타일들을 표시해서, 같은 타일을 또 보지 않도록 하게끔 주의)
         bool[,] mapFlags = new bool[obstacleMap.GetLength(0), obstacleMap.GetLength(1)];
         Queue<Coord> queue = new Queue<Coord>();
-        queue.Enqueue(centerCoord);
+        queue.Enqueue(_centerCoord);
         // 중앙 부분은 무조껀 비어있게끔
-        mapFlags[centerCoord.x, centerCoord.y] = true;
+        mapFlags[_centerCoord.x, _centerCoord.y] = true;
 
         // 접근 가능한 타일의 수 (1인 이유 : 처음에 가운데는 무조껀 가능한 위치라서)
         int accessibleTileCount = 1;
@@ -170,30 +169,30 @@ public class MapGenerator : MonoBehaviour
     public Coord GetRandomCoord()
     {
         // 가장 앞에 있는 좌표를 빼내고 맨 뒤로 보내준다.
-        Coord randomCoord = shuffledTileCoords.Dequeue();
-        shuffledTileCoords.Enqueue(randomCoord);
+        Coord randomCoord = _shuffledTileCoords.Dequeue();
+        _shuffledTileCoords.Enqueue(randomCoord);
         return randomCoord;
     }
 
     void FindStartToEndCoord(bool[,] obstacleMap)
     {
         List<Coord> openCoordList = new List<Coord>();
-        for (int i = 0; i < shuffledTileCoords.Count; i++)
+        for (int i = 0; i < _shuffledTileCoords.Count; i++)
         {
             Coord randomCoord;
-            Coord[] arrayCoord = new Coord[shuffledTileCoords.Count];
+            Coord[] arrayCoord = new Coord[_shuffledTileCoords.Count];
             
-            shuffledTileCoords.CopyTo(arrayCoord, 0);
+            _shuffledTileCoords.CopyTo(arrayCoord, 0);
             randomCoord = arrayCoord[i];
 
             if (obstacleMap[randomCoord.x, randomCoord.y] == false &&
                 ((randomCoord.x == 0 || randomCoord.x == obstacleMap.GetLength(0) - 1) ||
                 (randomCoord.y == 0 || randomCoord.y == obstacleMap.GetLength(1) - 1)))
             {
-                if (startCoord.x == -1 || startCoord.y == -1)
+                if (_startCoord.x == -1 || _startCoord.y == -1)
                 {
-                    startCoord = randomCoord;
-                    tiles[randomCoord].isStart = true;
+                    _startCoord = randomCoord;
+                    _tiles[randomCoord].isStart = true;
                 }
             }
             else if (obstacleMap[randomCoord.x, randomCoord.y] == false)
@@ -203,62 +202,63 @@ public class MapGenerator : MonoBehaviour
         int maxLength = 0;
         foreach (Coord edge in openCoordList)
         {
-            int length = Mathf.Abs(startCoord.x - edge.x) + Mathf.Abs(startCoord.y - edge.y);
+            int length = Mathf.Abs(_startCoord.x - edge.x) + Mathf.Abs(_startCoord.y - edge.y);
             if (length > maxLength)
             {
                 maxLength = length;
-                endCoord = edge;
+                _endCoord = edge;
             }
         }
-        tiles[endCoord].isEnd = true;
+        _tiles[_endCoord].isEnd = true;
 
         PathFinding();
     }
 
     void PathFinding()
     {
-        openList = new List<Tile>() { tiles[startCoord] };
-        closeList = new List<Tile>();
-        finalTileList = new List<Tile>();
+        _openList = new List<Tile>() { _tiles[_startCoord] };
+        _closeList = new List<Tile>();
+        _finalTileList = new List<Tile>();
 
-        while (openList.Count > 0)
+        while (_openList.Count > 0)
         {
-            curTile = openList[0];
+            _curTile = _openList[0];
 
-            for (int i = 1; i < openList.Count; i++)
+            for (int i = 1; i < _openList.Count; i++)
             {
-                if (openList[i].F <= curTile.F && openList[i].H < curTile.H)
-                    curTile = openList[i];
+                if (_openList[i].F <= _curTile.F && _openList[i].H < _curTile.H)
+                    _curTile = _openList[i];
             }
 
-            openList.Remove(curTile);
-            closeList.Add(curTile);
+            _openList.Remove(_curTile);
+            _closeList.Add(_curTile);
 
             // 마지막으로 결정된 길의 Tile들을 넣어준다.
-            if (curTile == tiles[endCoord])
+            if (_curTile == _tiles[_endCoord])
             {
-                Tile targetCurTile = tiles[endCoord];
-                while (targetCurTile != tiles[startCoord])
+                Tile targetCurTile = _tiles[_endCoord];
+                while (targetCurTile != _tiles[_startCoord])
                 {
-                    finalTileList.Add(targetCurTile);
+                    _finalTileList.Add(targetCurTile);
                     targetCurTile = targetCurTile.parentTile;
                 }
-                finalTileList.Add(tiles[startCoord]);
-                finalTileList.Reverse();
+                _finalTileList.Add(_tiles[_startCoord]);
+                _finalTileList.Reverse();
 
-                waypoints = new Transform[finalTileList.Count];
-                for (int i = 0; i < finalTileList.Count; i++)
+                waypoints = new Transform[_finalTileList.Count];
+                for (int i = 0; i < _finalTileList.Count; i++)
                 {
-                    waypoints[i] = finalTileList[i].transform;
+                    waypoints[i] = _finalTileList[i].transform;
                 }
+                WayPoints.points = waypoints;
                 return;
             }
 
             // 상,좌,하,우
-            OpenListAdd(curTile.coord.x, curTile.coord.y + 1);
-            OpenListAdd(curTile.coord.x + 1, curTile.coord.y);
-            OpenListAdd(curTile.coord.x, curTile.coord.y - 1);
-            OpenListAdd(curTile.coord.x - 1, curTile.coord.y);
+            OpenListAdd(_curTile.coord.x, _curTile.coord.y + 1);
+            OpenListAdd(_curTile.coord.x + 1, _curTile.coord.y);
+            OpenListAdd(_curTile.coord.x, _curTile.coord.y - 1);
+            OpenListAdd(_curTile.coord.x - 1, _curTile.coord.y);
         }
     }
 
@@ -268,18 +268,18 @@ public class MapGenerator : MonoBehaviour
 
         // x,y 좌표가 맵 끝을 넘지 않으며, 벽이 아니어야 하고, closeList에 있으면 안됌.
         if (x >= 0 && x < mapSize.x && y >= 0 && y < mapSize.y &&
-            !tiles[currentCoord].isObstcle && !closeList.Contains(tiles[currentCoord]))
+            !_tiles[currentCoord].isObstcle && !_closeList.Contains(_tiles[currentCoord]))
         {
-            Tile neighborTile = tiles[currentCoord];
-            int moveCost = curTile.G + 10;  // 대각선은 사용하지 않을 예정
+            Tile neighborTile = _tiles[currentCoord];
+            int moveCost = _curTile.G + 10;  // 대각선은 사용하지 않을 예정
 
-            if (moveCost < neighborTile.G || openList.Contains(neighborTile) == false)
+            if (moveCost < neighborTile.G || _openList.Contains(neighborTile) == false)
             {
                 neighborTile.G = moveCost;
-                neighborTile.H = Mathf.Abs(neighborTile.coord.x - tiles[endCoord].coord.x) + Mathf.Abs(neighborTile.coord.y - tiles[endCoord].coord.y) * 10;
-                neighborTile.parentTile = curTile;
+                neighborTile.H = Mathf.Abs(neighborTile.coord.x - _tiles[_endCoord].coord.x) + Mathf.Abs(neighborTile.coord.y - _tiles[_endCoord].coord.y) * 10;
+                neighborTile.parentTile = _curTile;
 
-                openList.Add(neighborTile);
+                _openList.Add(neighborTile);
             }
         }
     }

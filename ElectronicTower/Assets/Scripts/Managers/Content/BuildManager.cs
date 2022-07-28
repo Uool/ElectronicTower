@@ -9,7 +9,6 @@ public class BuildManager
     private Define.ETurretType _turretType;
     private NodeUI _nodeUI;
 
-
     public bool CanBuild { get { return _turretToBuild != null; }}
     public Define.ETurretType TurretType { get { return _turretType; } }
 
@@ -25,7 +24,7 @@ public class BuildManager
         _turretToBuild = null;
 
         if (_nodeUI == null)
-            _nodeUI = Managers.UI.MakeSubItem<NodeUI>(node.transform);
+            _nodeUI = Managers.UI.MakeSubItem<NodeUI>(/*node.transform*/);
 
         _nodeUI.SetTarget(node);
     }

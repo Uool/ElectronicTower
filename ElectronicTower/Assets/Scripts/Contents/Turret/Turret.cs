@@ -8,7 +8,7 @@ public abstract class Turret : MonoBehaviour
     public TurretData turretData;
     public Transform targetAimBase;
     public Transform partToRotate;
-    public Transform firePoint;
+    public Transform[] firePoints;
 
     [HideInInspector] public Transform target;
     [HideInInspector] public Transform myNode;

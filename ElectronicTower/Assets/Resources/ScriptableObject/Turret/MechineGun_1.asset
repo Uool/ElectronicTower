@@ -17,5 +17,5 @@ MonoBehaviour:
   _range: 30
   _turnSpeed: 10
   _fireRate: 5
-  _slowMultiplier: 0.2
+  _slowMultiplier: 0
   _damage: 5

@@ -6,6 +6,7 @@ public class UIManager
 {
     int _order = 10;
 
+    Canvas _canvas;
     Stack<UI_Popup> _popupStack = new Stack<UI_Popup>();
     UI_Scene _sceneUI = null;
 
@@ -22,18 +23,18 @@ public class UIManager
 
     public void SetCanvas(GameObject go, bool sort = true)
     {
-        Canvas canvas = Util.GetOrAddComponent<Canvas>(go);
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.overrideSorting = true;
+        _canvas = Util.GetOrAddComponent<Canvas>(go);
+        _canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        _canvas.overrideSorting = true;
 
         if (sort)
         {
-            canvas.sortingOrder = _order;
+            _canvas.sortingOrder = _order;
             _order++;
         }
         else
         {
-            canvas.sortingOrder = 0;
+            _canvas.sortingOrder = 0;
         }
     }
 
@@ -61,8 +62,10 @@ public class UIManager
 		GameObject go = Managers.Resource.Instantiate($"UI/SubItem/{name}");
 		if (parent != null)
 			go.transform.SetParent(parent);
+        else
+            go.transform.SetParent(_canvas.transform);
 
-		return Util.GetOrAddComponent<T>(go);
+        return Util.GetOrAddComponent<T>(go);
 	}
 
 	public T ShowSceneUI<T>(string name = null) where T : UI_Scene

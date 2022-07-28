@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 256915220856411483}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 253826165484873991}
@@ -65,8 +65,10 @@ MonoBehaviour:
   turretData: {fileID: 11400000, guid: 637d60b8895124a45a3590dc8347336a, type: 2}
   targetAimBase: {fileID: 8722247054263254049}
   partToRotate: {fileID: 253349601968290617}
-  firePoint: {fileID: 259821594214928635}
+  firePoints:
+  - {fileID: 259821594214928635}
   target: {fileID: 0}
+  myNode: {fileID: 0}
   isLinked: 0
 --- !u!120 &4031318381370772606
 LineRenderer:

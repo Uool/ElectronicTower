@@ -10,11 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23fa5d34f83a0eb42ae8a72b60719bc9, type: 3}
-  m_Name: Laser
+  m_Name: Rocket_0
   m_EditorClassIdentifier: 
-  projectile: {fileID: 1062685050423962, guid: 7f38f60a173ec7e4cacc9b7af686d87b, type: 3}
-  _type: 2
-  _range: 20
-  _turnSpeed: 10
-  _fireRate: 10
+  projectile: {fileID: 4277697553395524678, guid: 9d55cc16b8944a741978c95efbd60f59, type: 3}
+  _type: 1
+  _range: 30
+  _turnSpeed: 7
+  _fireRate: 0.3
+  _slowMultiplier: 0
   _damage: 10
