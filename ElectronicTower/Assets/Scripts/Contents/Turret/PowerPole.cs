@@ -56,6 +56,7 @@ public class PowerPole : MonoBehaviour
                     _linkedTurret.Add(turret);
                     //Vector3 localPos = electroLineTr.position * transform.localScale;
                     turret.ConnectedPowerPole(myNode.TransformPoint(_lineOriginPos));
+                    turret.isLinked = true;
                 }    
             }
         }
