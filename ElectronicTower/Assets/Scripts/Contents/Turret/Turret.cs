@@ -16,24 +16,23 @@ public abstract class Turret : MonoBehaviour
 
     private LineRenderer _lineRenderer;
     private float _fireCountDown = 1f;
+    private float _offsetHeight = 0.5f;
+    private Vector3 _lineOriginPos = Vector3.zero;
 
-    private void OnEnable()
+    protected abstract void Shoot();
+
+    public virtual void Init()
     {
         if (_lineRenderer == null)
             _lineRenderer = GetComponent<LineRenderer>();
 
         if (myNode != null)
         {
-            _lineRenderer.SetPosition(0, myNode.TransformPoint(targetAimBase.position));
-            _lineRenderer.SetPosition(1, myNode.TransformPoint(targetAimBase.position));
-        }       
-    }
+            _lineOriginPos = targetAimBase.position + Vector3.up * _offsetHeight;
+            _lineRenderer.SetPosition(0, myNode.TransformPoint(_lineOriginPos));
+            _lineRenderer.SetPosition(1, myNode.TransformPoint(_lineOriginPos));
+        }
 
-    protected abstract void Shoot();
-
-    public virtual void Init()
-    {
-        _lineRenderer = GetComponent<LineRenderer>();
         InvokeRepeating("UpdateTarget", 0f, 0.5f);
     }
 
@@ -87,6 +86,8 @@ public abstract class Turret : MonoBehaviour
 
     void UpdateTurretHead()
     {
+        if (target == null) return;
+
         Vector3 dir = (target.position - targetAimBase.position);
         Quaternion lookRotation = Quaternion.LookRotation(dir);
         Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turretData.TurnSpeed).eulerAngles;
@@ -96,13 +97,13 @@ public abstract class Turret : MonoBehaviour
 
     public void ConnectedPowerPole(Vector3 position)
     {
-        _lineRenderer.SetPosition(0, myNode.TransformPoint(targetAimBase.position));
+        _lineRenderer.SetPosition(0, myNode.TransformPoint(_lineOriginPos));
         _lineRenderer?.SetPosition(1, position);
     }
 
     public void DisConnectedPowerPole()
     {
-        _lineRenderer?.SetPosition(1, myNode.TransformPoint(targetAimBase.position));
+        _lineRenderer?.SetPosition(1, myNode.TransformPoint(_lineOriginPos));
     }
     #endregion
 }

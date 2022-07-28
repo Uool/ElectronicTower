@@ -146,7 +146,7 @@ Transform:
   m_GameObject: {fileID: 420290349105105497}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 421406626196052167}
@@ -170,6 +170,7 @@ MonoBehaviour:
   electroArea: {fileID: 2123308526551628274}
   isLinked: 0
   isSupplied: 0
+  myNode: {fileID: 0}
 --- !u!114 &421303649256816976
 MonoBehaviour:
   m_ObjectHideFlags: 0

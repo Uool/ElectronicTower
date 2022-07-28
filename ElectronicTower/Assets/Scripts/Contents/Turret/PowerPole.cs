@@ -13,24 +13,14 @@ public class PowerPole : MonoBehaviour
     private LineRenderer _lineRenderer;
     private List<Turret> _linkedTurret = new List<Turret>();
     private List<PowerPole> _linkedPowerPole = new List<PowerPole>();
+    private float _offsetHeight = 0.5f;
+    private Vector3 _lineOriginPos = Vector3.zero;
 
     [HideInInspector] public bool isLinked;
     [HideInInspector] public bool isSupplied;
     [HideInInspector] public Transform myNode;
     public UnityAction linkedAction;
 
-
-    private void OnEnable()
-    {
-        if (_lineRenderer == null)
-            _lineRenderer = GetComponent<LineRenderer>();
-
-        if (myNode != null)
-        {
-            _lineRenderer.SetPosition(0, myNode.TransformPoint(electroLineTr.position));
-            _lineRenderer.SetPosition(1, myNode.TransformPoint(electroLineTr.position));
-        }
-    }
 
     protected void OnDrawGizmosSelected()
     {
@@ -42,6 +32,16 @@ public class PowerPole : MonoBehaviour
     {
         linkedAction += LinkedTurret;
         linkedAction += LinkedPowerPole;
+
+        if (_lineRenderer == null)
+            _lineRenderer = GetComponent<LineRenderer>();
+
+        if (myNode != null)
+        {
+            _lineOriginPos = electroLineTr.position + Vector3.up * _offsetHeight;
+            _lineRenderer.SetPosition(0, myNode.TransformPoint(electroLineTr.position + Vector3.up * _offsetHeight));
+            _lineRenderer.SetPosition(1, myNode.TransformPoint(electroLineTr.position + Vector3.up * _offsetHeight));
+        }
     }
 
     public void LinkedTurret()
@@ -54,7 +54,8 @@ public class PowerPole : MonoBehaviour
                 if (_linkedTurret.Contains(turret) == false)
                 {
                     _linkedTurret.Add(turret);
-                    turret.ConnectedPowerPole(myNode.TransformPoint(electroLineTr.position));
+                    //Vector3 localPos = electroLineTr.position * transform.localScale;
+                    turret.ConnectedPowerPole(myNode.TransformPoint(_lineOriginPos));
                     turret.isLinked = true;
                 }    
             }
