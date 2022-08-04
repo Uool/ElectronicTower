@@ -2698,15 +2698,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 241981210}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a27e1712ba4d52e42906cff015050a37, type: 3}
+  m_Script: {fileID: 11500000, guid: 2667ddbe8f83af14299f1b870d209182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turretShopData:
+  _turretShopData:
   - {fileID: 11400000, guid: 79dac5f871118b44392209f478b334f4, type: 2}
   - {fileID: 11400000, guid: 36387749699815f43bbb62529c2a3cea, type: 2}
   - {fileID: 11400000, guid: 02d50b27ffbf8f34a8b170111883a79c, type: 2}
   - {fileID: 11400000, guid: 84d4462adb719494d8399e37f939a3d3, type: 2}
-  buyBtn:
+  _buyBtn:
   - {fileID: 2094337119}
   - {fileID: 412557682}
   - {fileID: 1271244012}

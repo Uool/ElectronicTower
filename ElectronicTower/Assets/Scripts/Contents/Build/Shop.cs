@@ -16,7 +16,7 @@ public class Shop : UI_Scene
         _buyBtn[(int)Define.ETurretType.Laser].onClick.AddListener(delegate { PurchaseTurret(Define.ETurretType.Laser); });
         _buyBtn[(int)Define.ETurretType.PowerPole].onClick.AddListener(delegate { PurchaseTurret(Define.ETurretType.PowerPole); });
 
-        // TODO: CSV 테이블로 ShopData 를 만들고, 그걸 바로 넣어주는 건 어떨까?
+        // TODO: CSV 테이블로 ShopData 를 만들고, 그걸 바로 넣어주는 건 어떨까???
     }
 
     // 터랫 구매
