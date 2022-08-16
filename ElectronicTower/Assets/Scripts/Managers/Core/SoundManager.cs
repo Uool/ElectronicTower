@@ -70,6 +70,11 @@ public class SoundManager
 		}
 	}
 
+    public void Volume(Define.ESound type, float volumeValue)
+    {
+        _audioSources[(int)type].volume = volumeValue;
+    }
+
 	AudioClip GetOrAddAudioClip(string path, Define.ESound type = Define.ESound.Effect)
     {
 		if (path.Contains("Sounds/") == false)
