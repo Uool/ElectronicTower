@@ -14,7 +14,6 @@ public class MainGameUI : UI_Scene
         OptionBtn,
         SpeedBtn,
         ShopBtn,
-        AreaCheckBtn,
     }
 
     public enum EGameObject
@@ -35,7 +34,6 @@ public class MainGameUI : UI_Scene
     }
 
     #endregion
-
     private float _gameSpeed = 1f;
     public override void Init()
     {
@@ -43,14 +41,32 @@ public class MainGameUI : UI_Scene
         BindUI();
 
         Get<Toggle>((int)EToggle.AreaCheckToggle).isOn = true;
+        GetObject((int)EGameObject.GameState).SetActive(false);
+
+        Managers.Game.startWaveAction -= StartWave;
+        Managers.Game.startWaveAction += StartWave;
+
+        Managers.Game.endWaveAction -= EndWave;
+        Managers.Game.endWaveAction += EndWave;
+    }
+
+    void Update()
+    {
+        if (GetObject((int)EGameObject.GameState).activeSelf == true)
+        {
+            // TODO: 웨이브 수 도 만들어야 함.
+            GetText((int)EText.EnemyText).text = $"적의 수 : {Managers.Game.enemyList.Count}";
+        }
     }
 
     void BindUI()
     {
         Bind<Button>(typeof(EButton));
+        Bind<GameObject>(typeof(EGameObject));
         Bind<Text>(typeof(EText));
         Bind<Toggle>(typeof(EToggle));
 
+        BindEvent(GetButton((int)EButton.StartBtn).gameObject, (PointerEventData data) => { Managers.Game.startWaveAction?.Invoke(); });
         BindEvent(GetButton((int)EButton.PauseBtn).gameObject, (PointerEventData data) => { Pause(); });
         BindEvent(GetButton((int)EButton.OptionBtn).gameObject, (PointerEventData data) => { Option(); });
         BindEvent(GetButton((int)EButton.SpeedBtn).gameObject, (PointerEventData data) => { Speed(); });
@@ -58,6 +74,18 @@ public class MainGameUI : UI_Scene
     }
 
     #region ButtonFunction
+    void StartWave()
+    {
+        GetButton((int)EButton.StartBtn).gameObject.SetActive(false);
+        GetObject((int)EGameObject.GameState).SetActive(true);
+    }
+
+    void EndWave()
+    {
+        GetButton((int)EButton.StartBtn).gameObject.SetActive(false);
+        GetObject((int)EGameObject.GameState).SetActive(true);
+    }
+
     void Pause()
     {
         UI_Pause pause = Managers.UI.ShowPopupUI<UI_Pause>();

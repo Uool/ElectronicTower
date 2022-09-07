@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManagerEx
 {
@@ -10,9 +11,12 @@ public class GameManagerEx
 
     public bool isPowerPoleArea = true;
 
-    public Enemy EnemySpawn(string path, Transform parent = null)
+    public UnityAction startWaveAction;
+    public UnityAction endWaveAction;
+
+    public Enemy EnemySpawn(GameObject enemyPrefab, Transform parent = null)
     {
-        Enemy enemy = Managers.Resource.Instantiate(path, parent).GetComponent<Enemy>();
+        Enemy enemy = Managers.Resource.Instantiate(enemyPrefab, parent).GetComponent<Enemy>();
 
         if (enemy == null)
             return null;

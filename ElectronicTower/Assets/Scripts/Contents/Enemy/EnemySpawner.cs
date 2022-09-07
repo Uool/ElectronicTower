@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -10,40 +11,60 @@ public class EnemySpawner : MonoBehaviour
     public GameObject enemyPrefab;
     public float timeBetweenWaves = 5f; // 웨이브와 웨이브 사이의 간격
 
+    [HideInInspector] public bool startWave;
+
+    [SerializeField] List<WaveData> waveDataList;
+
     private Transform _spawnPoint;    // starting point
-    private float _countDown = 2f;  // 첫 웨이브 시작할때 카운트 다운
-    private int _waveIndex = 1;
+    private int _waveCount = 0;
 
     private void Start()
     {
         _spawnPoint = WayPoints.points[0];
         enemyPrefab = Managers.Resource.Load<GameObject>("Prefabs/Enemy/Enemy");
+
+        waveDataList = new List<WaveData>();
+        waveDataList.Add(Managers.Resource.Load<WaveData>("ScriptableObject/Wave/EasyEnemyWave"));
+
+        Managers.Game.startWaveAction -= StartWave;
+        Managers.Game.startWaveAction += StartWave;
+    }
+
+    void StartWave()
+    {
+        StartCoroutine(coSpawnWave());
     }
 
     void Update()
     {
-        if (_countDown <= 0f)
-        {
-            StartCoroutine(coSpawnWave());
-            _countDown = timeBetweenWaves;
-        }
+        //if (startWave && _countDown <= 0f)
+        //{
+        //    StartCoroutine(coSpawnWave());
+        //    _countDown = timeBetweenWaves;
+        //}
 
-        _countDown -= Time.deltaTime;
+        //_countDown -= Time.deltaTime;
     }
 
     IEnumerator coSpawnWave()
     {
-        for (int i = 0; i < _waveIndex; i++)
+        for (int i = 0; i < waveDataList[_waveCount].EnemyCount; i++)
         {
             SpawnEnemy();
             yield return new WaitForSeconds(0.5f);
         }
-        _waveIndex++;
+
+        //for (int i = 0; i < _waveIndex; i++)
+        //{
+        //    SpawnEnemy();
+        //    yield return new WaitForSeconds(0.5f);
+        //}
+        //_waveIndex++;
     }
 
     void SpawnEnemy()
     {
-        Enemy enemy = Managers.Game.EnemySpawn($"Enemy/{enemyPrefab.name}");
+        Enemy enemy = Managers.Game.EnemySpawn(waveDataList[_waveCount].enemyPrefab);
         enemy.transform.position = _spawnPoint.position;
     }
 }
