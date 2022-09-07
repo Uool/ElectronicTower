@@ -12,7 +12,7 @@ public class Projectile : MonoBehaviour
 
     public GameObject impactEffect;
     public float explosionRadius;
-    public float speed = 30f;
+    public float speed = 10f;
 
     public void OnEnable()
     {

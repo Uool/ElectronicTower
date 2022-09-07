@@ -6,8 +6,10 @@ using UnityEngine.EventSystems;
 
 public class MainGameUI : UI_Scene
 {
+    #region Enum
     public enum EButton
     {
+        StartBtn,
         PauseBtn,
         OptionBtn,
         SpeedBtn,
@@ -15,28 +17,44 @@ public class MainGameUI : UI_Scene
         AreaCheckBtn,
     }
 
+    public enum EGameObject
+    {
+        GameState,
+    }
+
     public enum EText
     {
         SpeedText,
+        WaveText,
+        EnemyText,
     }
 
-    private GameObject _pauseUIObject;
+    public enum EToggle
+    {
+        AreaCheckToggle,
+    }
+
+    #endregion
 
     private float _gameSpeed = 1f;
     public override void Init()
     {
         base.Init();
         BindUI();
+
+        Get<Toggle>((int)EToggle.AreaCheckToggle).isOn = true;
     }
 
     void BindUI()
     {
         Bind<Button>(typeof(EButton));
         Bind<Text>(typeof(EText));
+        Bind<Toggle>(typeof(EToggle));
 
         BindEvent(GetButton((int)EButton.PauseBtn).gameObject, (PointerEventData data) => { Pause(); });
         BindEvent(GetButton((int)EButton.OptionBtn).gameObject, (PointerEventData data) => { Option(); });
         BindEvent(GetButton((int)EButton.SpeedBtn).gameObject, (PointerEventData data) => { Speed(); });
+        Get<Toggle>((int)EToggle.AreaCheckToggle).onValueChanged.AddListener(delegate { AreaCheck(); });
     }
 
     #region ButtonFunction
@@ -65,7 +83,7 @@ public class MainGameUI : UI_Scene
 
     void AreaCheck()
     {
-
+        Managers.Game.PowerPoleArea(Get<Toggle>((int)EToggle.AreaCheckToggle).isOn);
     }
 
     #endregion

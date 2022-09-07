@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,7 +13,13 @@ public class UI_Option : UI_Popup
 
     public enum EButton
     {
-        CloseBtn
+        CloseBtn,
+        QuitBtn,
+    }
+
+    public enum EImage
+    {
+        FadeOutPanel,
     }
 
     [HideInInspector] public float gameSpeed = 1f;
@@ -27,6 +34,9 @@ public class UI_Option : UI_Popup
 
         Bind<Button>(typeof(EButton));
         BindEvent(GetButton((int)EButton.CloseBtn).gameObject, (PointerEventData data) => { ClosePopupUI(); });
+        BindEvent(GetButton((int)EButton.QuitBtn).gameObject, (PointerEventData data) => { QuitGame(); });
+
+        Bind<Image>(typeof(EImage));
     }
 
     public override void ClosePopupUI()
@@ -42,5 +52,23 @@ public class UI_Option : UI_Popup
     void EffectSlider()
     {
         Managers.Sound.Volume(Define.ESound.Effect, Get<Slider>((int)ESlider.EffectSlider).value);
+    }
+
+    void QuitGame()
+    {
+        StartCoroutine(coFadeOut());
+    }
+
+    IEnumerator coFadeOut()
+    {
+        float alpha = 0f;
+
+        while(alpha <= 1f)
+        {
+            alpha += Time.deltaTime;
+            GetImage((int)EImage.FadeOutPanel).color = new Color(0, 0, 0, alpha);
+            yield return null;
+        }
+        Application.Quit();
     }
 }

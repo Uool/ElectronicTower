@@ -16,22 +16,14 @@ public class PowerPole : MonoBehaviour
     private float _offsetHeight = 0.5f;
     private Vector3 _lineOriginPos = Vector3.zero;
 
-    [HideInInspector] public bool isLinked;
-    [HideInInspector] public bool isSupplied;
     [HideInInspector] public Transform myNode;
+    [HideInInspector] public Vector3 originPos;
+    [HideInInspector] public bool isSupplied;
     public UnityAction linkedAction;
-
-
-    protected void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, poleData.Radius);
-    }
 
     public void Init()
     {
         linkedAction += LinkedTurret;
-        linkedAction += LinkedPowerPole;
 
         if (_lineRenderer == null)
             _lineRenderer = GetComponent<LineRenderer>();
@@ -42,13 +34,16 @@ public class PowerPole : MonoBehaviour
             _lineRenderer.SetPosition(0, myNode.TransformPoint(electroLineTr.position + Vector3.up * _offsetHeight));
             _lineRenderer.SetPosition(1, myNode.TransformPoint(electroLineTr.position + Vector3.up * _offsetHeight));
         }
+
+        originPos = myNode.position + new Vector3(0, myNode.position.y + _offsetHeight, 0);
+        ActiveElectroArea(Managers.Game.isPowerPoleArea);
     }
 
     public void LinkedTurret()
     {
         foreach (var turret in Managers.Game.turretList)
         {
-            float distance = (turret.transform.position - transform.position).magnitude;
+            float distance = (turret.originPos - originPos).magnitude;
             if (poleData.Radius > distance)
             {
                 if (_linkedTurret.Contains(turret) == false)
@@ -58,23 +53,6 @@ public class PowerPole : MonoBehaviour
                     turret.ConnectedPowerPole(myNode.TransformPoint(_lineOriginPos));
                     turret.isLinked = true;
                 }    
-            }
-        }
-    }
-
-    public void LinkedPowerPole()
-    {
-        foreach (var powerPole in Managers.Game.powerPoleList)
-        {
-            float distance = (powerPole.transform.position - transform.position).magnitude;
-            if (poleData.Radius > distance)
-            {
-                if (_linkedPowerPole.Contains(powerPole) == false)
-                {
-                    _linkedPowerPole.Add(powerPole);
-                    powerPole.ConnectedPowerPole(myNode.TransformPoint(electroLineTr.position));
-                    powerPole.isLinked = true;
-                }
             }
         }
     }

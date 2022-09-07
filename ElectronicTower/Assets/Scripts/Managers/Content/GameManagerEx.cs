@@ -7,6 +7,9 @@ public class GameManagerEx
     public List<Enemy> enemyList = new List<Enemy>();
     public List<Turret> turretList = new List<Turret>();
     public List<PowerPole> powerPoleList = new List<PowerPole>();
+
+    public bool isPowerPoleArea = true;
+
     public Enemy EnemySpawn(string path, Transform parent = null)
     {
         Enemy enemy = Managers.Resource.Instantiate(path, parent).GetComponent<Enemy>();
@@ -64,6 +67,15 @@ public class GameManagerEx
     {
         turretList.Remove(turret);
         Managers.Resource.Destroy(turret.gameObject);
+    }
+
+    public void PowerPoleArea(bool isOn)
+    {
+        isPowerPoleArea = isOn;
+        foreach (PowerPole powerPole in powerPoleList)
+        {
+            powerPole.ActiveElectroArea(isOn);
+        }
     }
 
     public void Clear()

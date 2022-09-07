@@ -9,8 +9,16 @@ public class BuildManager
     private Define.ETurretType _turretType;
     private NodeUI _nodeUI;
 
+
+    public UnityAction buildEndAction;
     public bool CanBuild { get { return _turretToBuild != null; }}
     public Define.ETurretType TurretType { get { return _turretType; } }
+
+    public void Init()
+    {
+        buildEndAction -= ClearTurretToBuild;
+        buildEndAction += ClearTurretToBuild;
+    }
 
     public void SelectNode (Node node)
     {
@@ -24,7 +32,7 @@ public class BuildManager
         _turretToBuild = null;
 
         if (_nodeUI == null)
-            _nodeUI = Managers.UI.MakeSubItem<NodeUI>(/*node.transform*/);
+            _nodeUI = Managers.UI.MakeSubItem<NodeUI>();
 
         _nodeUI.SetTarget(node);
     }
@@ -70,6 +78,14 @@ public class BuildManager
         if (_nodeUI != null)
             _nodeUI.Hide();
 
+        DeselectNode();
+    }
+
+    public void CancelTurretToBuild()
+    {
+        _turretToBuild = null;
+        if (_nodeUI != null)
+            _nodeUI.Hide();
         DeselectNode();
     }
 

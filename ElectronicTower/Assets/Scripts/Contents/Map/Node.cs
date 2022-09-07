@@ -33,7 +33,6 @@ public class Node : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0) && RaycastNode())
         {
-            Debug.Log(gameObject.name);
             if (EventSystem.current.IsPointerOverGameObject())
                 return;
 
@@ -79,7 +78,8 @@ public class Node : MonoBehaviour
         // TODO : 터렛을 건설했을 시 변화될 UI를 이벤트에 넣어야 함.
         //Managers.Resource.Instantiate(, node.transform);
 
-        Managers.Build.ClearTurretToBuild();
+        if (Managers.Build.buildEndAction != null)
+            Managers.Build.buildEndAction.Invoke();
     }
 
     public void UpgradeTurret()

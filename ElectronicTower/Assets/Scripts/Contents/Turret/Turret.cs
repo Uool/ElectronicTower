@@ -12,6 +12,7 @@ public abstract class Turret : MonoBehaviour
 
     [HideInInspector] public Transform target;
     [HideInInspector] public Transform myNode;
+    [HideInInspector] public Vector3 originPos;
     [HideInInspector] public bool isLinked;
 
     private LineRenderer _lineRenderer;
@@ -33,12 +34,15 @@ public abstract class Turret : MonoBehaviour
             _lineRenderer.SetPosition(1, myNode.TransformPoint(_lineOriginPos));
         }
 
+        originPos = myNode.position + new Vector3(0, myNode.position.y +_offsetHeight, 0);
+        
+
         InvokeRepeating("UpdateTarget", 0f, 0.5f);
     }
 
     protected void TurretUpdate()
     {
-        if (target == null && isLinked == false)
+        if (target == null || isLinked == false)
             return;
 
         UpdateTurretHead();

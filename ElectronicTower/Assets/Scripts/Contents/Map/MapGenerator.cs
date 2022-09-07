@@ -81,8 +81,9 @@ public class MapGenerator : MonoBehaviour
             {
                 Vector3 tilePosition = CoordToPosition(x, y);
                 Coord tileCoord = new Coord(x, y);
-                //GameObject newTile = Managers.Resource.Instantiate(tilePrefab.gameObject, tilePosition, Quaternion.Euler(Vector3.right * 90), mapHolder);
-                Tile newTile = Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90), mapHolder).GetComponent<Tile>();
+                Tile newTile = Managers.Resource.Instantiate(tilePrefab.gameObject, tilePosition, Quaternion.Euler(Vector3.right * 90), mapHolder).GetComponent<Tile>();
+                //Tile newTile = Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90), mapHolder).GetComponent<Tile>();
+                newTile.Init();
                 newTile.transform.localScale = Vector3.one * (1 - outlinePercent);
                 newTile.coord = tileCoord;
                 _tiles.Add(tileCoord, newTile);
@@ -102,8 +103,8 @@ public class MapGenerator : MonoBehaviour
             if (randomCoord != _centerCoord && MapIsFullyAccessable(obstacleMap, currentObstacleCount))
             {
                 Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
-                //GameObject newObstacle = Managers.Resource.Instantiate(obstaclePrefab.gameObject, obstaclePosition + Vector3.up * 0.5f, Quaternion.identity, mapHolder);
-                Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition + Vector3.up * 0.5f, Quaternion.identity, mapHolder) as Transform;
+                GameObject newObstacle = Managers.Resource.Instantiate(obstaclePrefab.gameObject, obstaclePosition + Vector3.up * 0.5f, Quaternion.identity, mapHolder);
+                //Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition + Vector3.up * 0.5f, Quaternion.identity, mapHolder) as Transform;
 
                 if (_tiles.ContainsKey(randomCoord))
                     _tiles[randomCoord].isObstcle = true;
@@ -245,6 +246,9 @@ public class MapGenerator : MonoBehaviour
                 _finalTileList.Add(_tiles[_startCoord]);
                 _finalTileList.Reverse();
 
+                _finalTileList[0].SetPointing("StartTile");
+                _finalTileList[_finalTileList.Count - 1].SetPointing("EndTile");
+
                 waypoints = new Transform[_finalTileList.Count];
                 for (int i = 0; i < _finalTileList.Count; i++)
                 {
@@ -284,15 +288,15 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        if (waypoints != null && waypoints.Length != 0)
-        {
-            for (int i = 0; i < waypoints.Length - 1; i++)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawLine(waypoints[i].position + Vector3.up * 0.5f, waypoints[i + 1].position + Vector3.up * 0.5f);
-            }
-        }            
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    if (waypoints != null && waypoints.Length != 0)
+    //    {
+    //        for (int i = 0; i < waypoints.Length - 1; i++)
+    //        {
+    //            Gizmos.color = Color.red;
+    //            Gizmos.DrawLine(waypoints[i].position + Vector3.up * 0.5f, waypoints[i + 1].position + Vector3.up * 0.5f);
+    //        }
+    //    }            
+    //}
 }
