@@ -35,17 +35,6 @@ public class EnemySpawner : MonoBehaviour
         StartCoroutine(coSpawnWave());
     }
 
-    void Update()
-    {
-        //if (startWave && _countDown <= 0f)
-        //{
-        //    StartCoroutine(coSpawnWave());
-        //    _countDown = timeBetweenWaves;
-        //}
-
-        //_countDown -= Time.deltaTime;
-    }
-
     IEnumerator coSpawnWave()
     {
         for (int i = 0; i < waveDataList[_waveCount].EnemyCount; i++)
@@ -53,13 +42,6 @@ public class EnemySpawner : MonoBehaviour
             SpawnEnemy();
             yield return new WaitForSeconds(0.5f);
         }
-
-        //for (int i = 0; i < _waveIndex; i++)
-        //{
-        //    SpawnEnemy();
-        //    yield return new WaitForSeconds(0.5f);
-        //}
-        //_waveIndex++;
     }
 
     void SpawnEnemy()

@@ -1,0 +1,10 @@
+TurretName,Projectile,Type,Level,Range,TurnSpeed,FireRate,SlowMultiplier,Damage
+MechineGun_0,Bullet,0,0,30,10,3,0,3
+MechineGun_1,Bullet,0,1,30,10,5,0,5
+MechineGun_2,Bullet,0,2,30,10,8,0,5
+Rocket_0,RocketProjectile,1,0,30,7,0.3,0,10
+Rocket_1,RocketProjectile,1,1,30,7,1,0,10
+Rocket_2,RocketProjectile,1,2,30,7,2,0,7
+Laser_0,PowerBeam,2,0,20,10,10,0.2,3
+Laser_1,PowerBeam,2,1,20,10,10,0.3,5
+Laser_2,PowerBeam,2,2,20,10,10,0.5,6

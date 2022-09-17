@@ -61,7 +61,7 @@ public class Enemy : MonoBehaviour
     {
         // TODO: 사라지는 이팩트 발동
         //Managers.Resource.Instantiate(, transform);
-        Managers.Player.money += enemyData.Money;
+        Managers.Player.GetMoney(enemyData.Money);
         Managers.Game.EnemyDespawn(this);
     }
 

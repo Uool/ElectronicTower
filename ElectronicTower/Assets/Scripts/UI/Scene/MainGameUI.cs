@@ -26,6 +26,7 @@ public class MainGameUI : UI_Scene
         SpeedText,
         WaveText,
         EnemyText,
+        CashText,
     }
 
     public enum EToggle
@@ -43,6 +44,8 @@ public class MainGameUI : UI_Scene
         Get<Toggle>((int)EToggle.AreaCheckToggle).isOn = true;
         GetObject((int)EGameObject.GameState).SetActive(false);
 
+        GetText((int)EText.CashText).text = Managers.Player.GameMoney.ToString();
+
         Managers.Game.startWaveAction -= StartWave;
         Managers.Game.startWaveAction += StartWave;
 
@@ -57,6 +60,8 @@ public class MainGameUI : UI_Scene
             // TODO: 웨이브 수 도 만들어야 함.
             GetText((int)EText.EnemyText).text = $"적의 수 : {Managers.Game.enemyList.Count}";
         }
+
+        GetText((int)EText.CashText).text = CommaText(Managers.Player.GameMoney).ToString();
     }
 
     void BindUI()
@@ -114,5 +119,12 @@ public class MainGameUI : UI_Scene
         Managers.Game.PowerPoleArea(Get<Toggle>((int)EToggle.AreaCheckToggle).isOn);
     }
 
+    #endregion
+
+    #region ETC
+    string CommaText(int number)
+    {
+        return string.Format("{0:#,###}", number);
+    }
     #endregion
 }

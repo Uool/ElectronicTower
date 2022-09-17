@@ -19,6 +19,10 @@ public class Node : MonoBehaviour
 
     private int _upgradeStep;
 
+    public Define.ETurretType TurretType { get; private set; }
+    public TurretShopData ShopData { get { return _shopData; } }
+    public int UpgradeStep { get { return _upgradeStep; } }
+
     void Start()
     {
         _renderer = GetComponent<Renderer>();
@@ -65,7 +69,7 @@ public class Node : MonoBehaviour
     {
         _shopData = shopData;
 
-        Managers.Player.money -= shopData.Cost;
+        Managers.Player.ConsumeMoney(shopData.Cost);
         GameObject turretObject = null;
         if (Managers.Build.TurretType == Define.ETurretType.PowerPole)
             turretObject = Managers.Game.PowerPoleSpawn(shopData.turretPrefab[_upgradeStep], transform);
@@ -73,7 +77,9 @@ public class Node : MonoBehaviour
             turretObject = Managers.Game.TurretSpawn(shopData.turretPrefab[_upgradeStep], transform);
 
         turretObject.transform.position = GetBuildPosition();
+
         _turret = turretObject;
+        TurretType = Managers.Build.TurretType;
 
         // TODO : 터렛을 건설했을 시 변화될 UI를 이벤트에 넣어야 함.
         //Managers.Resource.Instantiate(, node.transform);
@@ -84,15 +90,17 @@ public class Node : MonoBehaviour
 
     public void UpgradeTurret()
     {
-        if (Managers.Player.money >= _shopData.UpgradeCost)
+        if (Managers.Player.GameMoney >= _shopData.UpgradeCost)
         {
             _upgradeStep++;
-            GameObject turretObject = null;
+            if (_upgradeStep > _shopData.MaxUpgrade)
+                return;
 
+            GameObject turretObject = null;
             Managers.Resource.Destroy(_turret);
-            if (Managers.Build.TurretType == Define.ETurretType.PowerPole)
-                turretObject = Managers.Game.PowerPoleSpawn(_shopData.turretPrefab[_upgradeStep], transform);
-            else
+            //f (Managers.Build.TurretType == Define.ETurretType.PowerPole)
+            //   turretObject = Managers.Game.PowerPoleSpawn(_shopData.turretPrefab[_upgradeStep], transform);
+            //lse
                 turretObject = Managers.Game.TurretSpawn(_shopData.turretPrefab[_upgradeStep], transform);
 
             turretObject.transform.position = GetBuildPosition();
@@ -108,14 +116,17 @@ public class Node : MonoBehaviour
 
     public void SellTurret()
     {
-        // TODO: 돈 액수는 나중에 따로.
-        Managers.Player.money += 100;
+        int sellCost = (int)(_shopData.Cost * 0.8f);
+        Managers.Player.GetMoney(sellCost);
 
         Managers.Resource.Destroy(_turret);
         _shopData = null;
 
         // TODO : 판매 시 연출 or 사운드
-        //Managers.Resource.Instantiate(, node.transform);
+        GameObject sellEffect = Managers.Resource.Instantiate("Effect/FX_Money_Coins_Burst_01", transform);
+        Managers.Sound.Play("");
+        sellEffect.transform.position = GetBuildPosition();
+        Managers.Resource.Destroy(sellEffect,2f);
     }
 
     public Vector3 GetBuildPosition() { return transform.position + positionOffset; }

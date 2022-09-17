@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: MechineGun_2
   m_EditorClassIdentifier: 
   projectile: {fileID: 5087125022182047182, guid: e7c4fc4f4e44ff84285986ae7546c21e, type: 3}
+  _turretName: MechineGun_2
   _type: 0
+  _level: 2
   _range: 30
   _turnSpeed: 10
   _fireRate: 8

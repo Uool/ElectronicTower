@@ -16,6 +16,8 @@ public class BuildManager
 
     public void Init()
     {
+        _nodeUI = GameObject.FindObjectOfType<NodeUI>();
+
         buildEndAction -= ClearTurretToBuild;
         buildEndAction += ClearTurretToBuild;
     }
@@ -64,7 +66,7 @@ public class BuildManager
     public void SelectTurretToBuild(Define.ETurretType type, TurretShopData turretData)
     {
         _turretType = type;
-        if (Managers.Player.money >= turretData.Cost)
+        if (Managers.Player.GameMoney >= turretData.Cost)
         {
             _turretToBuild = turretData;
             _selectedNode = null;

@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Laser_0
   m_EditorClassIdentifier: 
   projectile: {fileID: 1062685050423962, guid: 7f38f60a173ec7e4cacc9b7af686d87b, type: 3}
+  _turretName: Laser_0
   _type: 2
+  _level: 0
   _range: 20
   _turnSpeed: 10
   _fireRate: 10

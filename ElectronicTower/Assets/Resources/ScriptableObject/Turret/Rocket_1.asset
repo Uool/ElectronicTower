@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Rocket_1
   m_EditorClassIdentifier: 
   projectile: {fileID: 4277697553395524678, guid: 9d55cc16b8944a741978c95efbd60f59, type: 3}
+  _turretName: Rocket_1
   _type: 1
+  _level: 1
   _range: 30
   _turnSpeed: 7
   _fireRate: 1
