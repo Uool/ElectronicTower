@@ -5,9 +5,8 @@ using UnityEngine.Events;
 
 public class Health : MonoBehaviour
 {
-    public float maxHealth = 100f;
-    [Tooltip("아프다는 표현이 나타날 체력 비율")]
-    public float criticalHealthRatio = 0.3f;
+    private float _maxHealth;
+    private float _criticalHealthRatio = 0.3f;
 
     public UnityAction<float, GameObject> onDamaged;
     public UnityAction<float> onHealed;
@@ -15,8 +14,8 @@ public class Health : MonoBehaviour
 
     public float currentHealth { get; private set; }
 
-    public float getRatio() => currentHealth / maxHealth;           // 현재 남은 체력 비율
-    public bool isCritical() => getRatio() <= criticalHealthRatio;  // 치명적 비율보다 낮으면 위험 상황 True
+    public float getRatio() => currentHealth / _maxHealth;           // 현재 남은 체력 비율
+    public bool isCritical() => getRatio() <= _criticalHealthRatio;  // 치명적 비율보다 낮으면 위험 상황 True
 
     bool m_IsDead;
 
@@ -27,7 +26,7 @@ public class Health : MonoBehaviour
 
     public void SetMaxHealth(float maxHealth)
     {
-        this.maxHealth = maxHealth;
+        this._maxHealth = maxHealth;
         this.currentHealth = maxHealth;
     }
 
@@ -35,7 +34,7 @@ public class Health : MonoBehaviour
     {
         float healthBefore = currentHealth;
         currentHealth += healAmount;
-        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth, 0f, _maxHealth);
 
         // Call OnHeal Action
         float trueHealAmount = currentHealth - healthBefore;
@@ -47,7 +46,7 @@ public class Health : MonoBehaviour
     {
         float healthBefore = currentHealth;
         currentHealth -= damage;
-        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth, 0f, _maxHealth);
 
         // Call OnDamage Action
         float trueDamageAmount = healthBefore - currentHealth;
@@ -64,7 +63,7 @@ public class Health : MonoBehaviour
         currentHealth = 0f;
 
         if (null != onDamaged)
-            onDamaged.Invoke(maxHealth, null);
+            onDamaged.Invoke(_maxHealth, null);
 
         HandleDeath();
     }

@@ -4,16 +4,7 @@ using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [Header("EnemyList")]
-    public string[] enemyName;
-
-    [Space(5)]
-    public GameObject enemyPrefab;
-    public float timeBetweenWaves = 5f; // 웨이브와 웨이브 사이의 간격
-
-    [HideInInspector] public bool startWave;
-
-    [SerializeField] List<WaveData> waveDataList;
+    [SerializeField] List<WaveData> _waveDataList;
 
     private Transform _spawnPoint;    // starting point
     private int _waveCount = 0;
@@ -21,10 +12,8 @@ public class EnemySpawner : MonoBehaviour
     private void Start()
     {
         _spawnPoint = WayPoints.points[0];
-        enemyPrefab = Managers.Resource.Load<GameObject>("Prefabs/Enemy/Enemy");
 
-        waveDataList = new List<WaveData>();
-        waveDataList.Add(Managers.Resource.Load<WaveData>("ScriptableObject/Wave/EasyEnemyWave"));
+        _waveDataList = Managers.Game.waveDataList;
 
         Managers.Game.startWaveAction -= StartWave;
         Managers.Game.startWaveAction += StartWave;
@@ -32,21 +21,30 @@ public class EnemySpawner : MonoBehaviour
 
     void StartWave()
     {
-        StartCoroutine(coSpawnWave());
+        if (_waveCount < _waveDataList.Count)
+            StartCoroutine(coSpawnWave());
     }
 
     IEnumerator coSpawnWave()
     {
-        for (int i = 0; i < waveDataList[_waveCount].EnemyCount; i++)
+        for (int i = 0; i < _waveDataList[_waveCount].EnemyCount; i++)
         {
             SpawnEnemy();
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(_waveDataList[_waveCount].SpawnDelay);
         }
+
+        while (Managers.Game.enemyList.Count > 0)
+        {
+            yield return null;
+        }
+
+        Managers.Game.endWaveAction?.Invoke();
+        _waveCount++;
     }
 
     void SpawnEnemy()
     {
-        Enemy enemy = Managers.Game.EnemySpawn(waveDataList[_waveCount].enemyPrefab);
+        Enemy enemy = Managers.Game.EnemySpawn(_waveDataList[_waveCount].enemyPrefab);
         enemy.transform.position = _spawnPoint.position;
     }
 }

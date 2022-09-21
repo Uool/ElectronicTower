@@ -17,13 +17,13 @@ public class Tile : MonoBehaviour
     public int F { get { return G + H; } }
     public void Init()
     {
-        tileMat = Managers.Resource.Load<Material>("Materials/Tile");
+        tileMat = Managers.Resource.Load<Material>("Materials/Tile/Tile");
         GetComponent<MeshRenderer>().material = tileMat;
     }
 
     public void SetPointing(string pointing)
     {
-        tileMat = Managers.Resource.Load<Material>($"Materials/{pointing}");
+        tileMat = Managers.Resource.Load<Material>($"Materials/Tile/{pointing}");
         GetComponent<MeshRenderer>().material = tileMat;
     }
 }

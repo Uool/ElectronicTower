@@ -1,0 +1,4 @@
+FileName,MaxHp,MoveSpeed,Money
+EasyEnemy,10,4,10
+NormalEnemy,30,3,16
+BossEnemy,150,1.5,50

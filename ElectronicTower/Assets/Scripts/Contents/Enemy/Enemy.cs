@@ -49,7 +49,8 @@ public class Enemy : MonoBehaviour
     {
         if (_wavePointIndex >= WayPoints.points.Length - 1)
         {
-            Managers.Resource.Destroy(gameObject);
+            // TODO: 플레이어 체력이 깎이는 사운드 and 효과
+            Managers.Game.EnemyDespawn(this);
             return;
         }
 

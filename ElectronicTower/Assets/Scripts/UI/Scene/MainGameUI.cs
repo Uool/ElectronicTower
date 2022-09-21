@@ -35,6 +35,7 @@ public class MainGameUI : UI_Scene
     }
 
     #endregion
+    private int _waveCount = 0;
     private float _gameSpeed = 1f;
     public override void Init()
     {
@@ -58,7 +59,9 @@ public class MainGameUI : UI_Scene
         if (GetObject((int)EGameObject.GameState).activeSelf == true)
         {
             // TODO: 웨이브 수 도 만들어야 함.
+            GetText((int)EText.WaveText).text = $"남은 웨이브: {Managers.Game.waveDataList.Count - _waveCount}";
             GetText((int)EText.EnemyText).text = $"적의 수 : {Managers.Game.enemyList.Count}";
+
         }
 
         GetText((int)EText.CashText).text = CommaText(Managers.Player.GameMoney).ToString();
@@ -81,14 +84,15 @@ public class MainGameUI : UI_Scene
     #region ButtonFunction
     void StartWave()
     {
+        _waveCount++;
         GetButton((int)EButton.StartBtn).gameObject.SetActive(false);
         GetObject((int)EGameObject.GameState).SetActive(true);
     }
 
     void EndWave()
     {
-        GetButton((int)EButton.StartBtn).gameObject.SetActive(false);
-        GetObject((int)EGameObject.GameState).SetActive(true);
+        GetButton((int)EButton.StartBtn).gameObject.SetActive(true);
+        GetObject((int)EGameObject.GameState).SetActive(false);
     }
 
     void Pause()

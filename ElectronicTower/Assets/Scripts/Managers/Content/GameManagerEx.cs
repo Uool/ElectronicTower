@@ -8,11 +8,18 @@ public class GameManagerEx
     public List<Enemy> enemyList = new List<Enemy>();
     public List<Turret> turretList = new List<Turret>();
     public List<PowerPole> powerPoleList = new List<PowerPole>();
-
+    public List<WaveData> waveDataList = new List<WaveData>();
     public bool isPowerPoleArea = true;
 
     public UnityAction startWaveAction;
     public UnityAction endWaveAction;
+
+    public void Init()
+    {
+        waveDataList.Add(Managers.Resource.Load<WaveData>("ScriptableObject/Wave/EasyEnemyWave"));
+        waveDataList.Add(Managers.Resource.Load<WaveData>("ScriptableObject/Wave/NormalEnemyWave"));
+        waveDataList.Add(Managers.Resource.Load<WaveData>("ScriptableObject/Wave/BossEnemyWave"));
+    }
 
     public Enemy EnemySpawn(GameObject enemyPrefab, Transform parent = null)
     {

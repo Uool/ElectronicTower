@@ -1,0 +1,4 @@
+FileName,EnemyName,EnmeyCount,SpawnDelay
+EasyEnemyWave,EasyEnemy,15,2
+NormalEnemyWave,NormalEnemy,10,3
+BossEnemyWave,BossEnemy,3,5

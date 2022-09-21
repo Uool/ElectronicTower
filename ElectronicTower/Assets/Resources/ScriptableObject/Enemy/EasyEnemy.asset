@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14dcf18061abb124fbc0e9ce2620830f, type: 3}
-  m_Name: EasyEnemyWave
+  m_Script: {fileID: 11500000, guid: cebf6a26c575e894d919925c30841d70, type: 3}
+  m_Name: EasyEnemy
   m_EditorClassIdentifier: 
-  fileName: EasyEnemyWave
-  enemyPrefab: {fileID: 6750902550303328708, guid: 7ef78e36ee2e90542bfdda8ec81cbaab, type: 3}
-  _enemyCount: 15
-  _spawnDelay: 0.8
+  fileName: EasyEnemy
+  _maxHp: 10
+  _moveSpeed: 4
+  _money: 10

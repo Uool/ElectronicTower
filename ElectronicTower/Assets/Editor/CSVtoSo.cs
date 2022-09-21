@@ -6,7 +6,8 @@ public class CSVtoSo
 {
     private static string _turretDataCSVPath = "/Editor/CSV/TurretData.csv";
     private static string _turretShopDataCSVPath = "/Editor/CSV/TurretShopData.csv";
-    private static string _EnemyWaveDataCSVPath = "/Editor/CSV/EnemyWaveData.csv";
+    private static string _enemyDataCSVPath = "/Editor/CSV/EnemyData.csv";
+    private static string _waveDataCSVPath = "/Editor/CSV/WaveData.csv";
 
     [MenuItem("CSV/TurretData")]
     public static void GenerateTurretData()
@@ -43,15 +44,31 @@ public class CSVtoSo
     [MenuItem("CSV/EnemyWave")]
     public static void GenerateEnemyWaveData()
     {
-        string[] allLines = File.ReadAllLines(Application.dataPath + _EnemyWaveDataCSVPath);
+        string[] allLines = File.ReadAllLines(Application.dataPath + _waveDataCSVPath);
 
         for (int i = 1; i < allLines.Length; i++)
         {
             string[] splitData = allLines[i].Split(',');
             WaveData waveData = ScriptableObject.CreateInstance<WaveData>();
-            //waveData.TurretShopDataInit(splitData);
+            waveData.WaveDataInit(splitData);
 
-            //AssetDatabase.CreateAsset(waveData, $"Assets/Resources/ScriptableObject/Shop/{waveData.fileName}.asset");
+            AssetDatabase.CreateAsset(waveData, $"Assets/Resources/ScriptableObject/Wave/{waveData.fileName}.asset");
+        }
+        AssetDatabase.SaveAssets();
+    }
+
+    [MenuItem("CSV/EnemyData")]
+    public static void GenerateEnemyData()
+    {
+        string[] allLines = File.ReadAllLines(Application.dataPath + _enemyDataCSVPath);
+
+        for (int i = 1; i < allLines.Length; i++)
+        {
+            string[] splitData = allLines[i].Split(',');
+            EnemyData enemyData = ScriptableObject.CreateInstance<EnemyData>();
+            enemyData.EnemyDataInit(splitData);
+
+            AssetDatabase.CreateAsset(enemyData, $"Assets/Resources/ScriptableObject/Enemy/{enemyData.fileName}.asset");
         }
         AssetDatabase.SaveAssets();
     }

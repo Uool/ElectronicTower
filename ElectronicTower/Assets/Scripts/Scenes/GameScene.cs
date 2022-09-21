@@ -8,7 +8,9 @@ public class GameScene : BaseScene
     {
         base.Init();
         SceneType = Define.EScene.Game;
-        
+
+        // 최초 웨이브 불러온 후 생성
+        Managers.Game.Init();
     }
 
     public override void Clear()

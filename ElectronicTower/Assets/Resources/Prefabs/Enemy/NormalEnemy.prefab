@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 3346709970161322423}
   - component: {fileID: -5243194798346804313}
   m_Layer: 6
-  m_Name: Enemy
+  m_Name: NormalEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 6750902550303328708}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -65,7 +65,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 263c07e5f1301ac478348582a480e3a0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004a37cecfd082c4b983d34c00e98e9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyData: {fileID: 11400000, guid: 0825e9fd04c16324592ff38a71fbc3f3, type: 2}
+  enemyData: {fileID: 11400000, guid: 925368b4c8bcb644fa5123d38b349c57, type: 2}
 --- !u!114 &-5243194798346804313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,5 +138,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeab6db15f380474bbb47832bafb4e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  criticalHealthRatio: 0.3
