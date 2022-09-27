@@ -27,6 +27,7 @@ public class MainGameUI : UI_Scene
         WaveText,
         EnemyText,
         CashText,
+        HealthText,
     }
 
     public enum EToggle
@@ -46,25 +47,13 @@ public class MainGameUI : UI_Scene
         GetObject((int)EGameObject.GameState).SetActive(false);
 
         GetText((int)EText.CashText).text = Managers.Player.GameMoney.ToString();
+        GetText((int)EText.HealthText).text = Managers.Player.GameHealth.ToString();
 
         Managers.Game.startWaveAction -= StartWave;
         Managers.Game.startWaveAction += StartWave;
 
         Managers.Game.endWaveAction -= EndWave;
         Managers.Game.endWaveAction += EndWave;
-    }
-
-    void Update()
-    {
-        if (GetObject((int)EGameObject.GameState).activeSelf == true)
-        {
-            // TODO: 웨이브 수 도 만들어야 함.
-            GetText((int)EText.WaveText).text = $"남은 웨이브: {Managers.Game.waveDataList.Count - _waveCount}";
-            GetText((int)EText.EnemyText).text = $"적의 수 : {Managers.Game.enemyList.Count}";
-
-        }
-
-        GetText((int)EText.CashText).text = CommaText(Managers.Player.GameMoney).ToString();
     }
 
     void BindUI()
@@ -79,6 +68,19 @@ public class MainGameUI : UI_Scene
         BindEvent(GetButton((int)EButton.OptionBtn).gameObject, (PointerEventData data) => { Option(); });
         BindEvent(GetButton((int)EButton.SpeedBtn).gameObject, (PointerEventData data) => { Speed(); });
         Get<Toggle>((int)EToggle.AreaCheckToggle).onValueChanged.AddListener(delegate { AreaCheck(); });
+    }
+
+    void Update()
+    {
+        if (GetObject((int)EGameObject.GameState).activeSelf == true)
+        {
+            // TODO: 웨이브 수 도 만들어야 함.
+            GetText((int)EText.WaveText).text = $"남은 웨이브: {Managers.Game.waveDataList.Count - _waveCount}";
+            GetText((int)EText.EnemyText).text = $"적의 수 : {Managers.Game.enemyList.Count}";
+        }
+
+        GetText((int)EText.CashText).text = CommaText(Managers.Player.GameMoney).ToString();
+        GetText((int)EText.HealthText).text = CommaText(Managers.Player.GameHealth).ToString();
     }
 
     #region ButtonFunction
@@ -130,5 +132,6 @@ public class MainGameUI : UI_Scene
     {
         return string.Format("{0:#,###}", number);
     }
+
     #endregion
 }

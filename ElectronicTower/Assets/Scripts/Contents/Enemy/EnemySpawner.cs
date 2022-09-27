@@ -17,6 +17,8 @@ public class EnemySpawner : MonoBehaviour
 
         Managers.Game.startWaveAction -= StartWave;
         Managers.Game.startWaveAction += StartWave;
+
+        StopCoroutine(coSpawnWave());
     }
 
     void StartWave()

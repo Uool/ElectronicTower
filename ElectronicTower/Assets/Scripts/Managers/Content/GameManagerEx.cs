@@ -9,6 +9,7 @@ public class GameManagerEx
     public List<Turret> turretList = new List<Turret>();
     public List<PowerPole> powerPoleList = new List<PowerPole>();
     public List<WaveData> waveDataList = new List<WaveData>();
+
     public bool isPowerPoleArea = true;
 
     public UnityAction startWaveAction;
@@ -16,6 +17,8 @@ public class GameManagerEx
 
     public void Init()
     {
+        Managers.Player.Init();
+
         waveDataList.Add(Managers.Resource.Load<WaveData>("ScriptableObject/Wave/EasyEnemyWave"));
         waveDataList.Add(Managers.Resource.Load<WaveData>("ScriptableObject/Wave/NormalEnemyWave"));
         waveDataList.Add(Managers.Resource.Load<WaveData>("ScriptableObject/Wave/BossEnemyWave"));
@@ -59,15 +62,6 @@ public class GameManagerEx
         return go;
     }
 
-    void CheckLink()
-    {
-        foreach (PowerPole pole in powerPoleList)
-        {
-            if (pole.linkedAction != null)
-                pole.linkedAction.Invoke();
-        }
-    }
-
     public void EnemyDespawn(Enemy enemy)
     {
         enemyList.Remove(enemy);
@@ -89,9 +83,29 @@ public class GameManagerEx
         }
     }
 
+    public void GameOver()
+    {
+        if (Managers.Player.GameHealth <= 0)
+            Managers.UI.ShowPopupUI<UI_GameOver>();
+    }
+
     public void Clear()
     {
         enemyList.Clear();
         turretList.Clear();
+        powerPoleList.Clear();
+        waveDataList.Clear();
+
+        startWaveAction = null;
+        endWaveAction = null;
+    }
+
+    void CheckLink()
+    {
+        foreach (PowerPole pole in powerPoleList)
+        {
+            if (pole.linkedAction != null)
+                pole.linkedAction.Invoke();
+        }
     }
 }

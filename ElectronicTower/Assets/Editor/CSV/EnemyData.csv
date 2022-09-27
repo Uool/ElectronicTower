@@ -1,4 +1,4 @@
-FileName,MaxHp,MoveSpeed,Money
-EasyEnemy,10,4,10
-NormalEnemy,30,3,16
-BossEnemy,150,1.5,50
+FileName,MaxHp,MoveSpeed,Money,Damage
+EasyEnemy,10,4,10,1
+NormalEnemy,30,3,16,2
+BossEnemy,150,1.5,50,5

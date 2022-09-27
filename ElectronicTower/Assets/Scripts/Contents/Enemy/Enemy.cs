@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         _health = GetComponent<Health>();
+        _health.onDie -= Die;
         _health.onDie += Die;
     }
 
@@ -26,6 +27,12 @@ public class Enemy : MonoBehaviour
         _health.SetMaxHealth(enemyData.MaxHp);
         _wavePointIndex = 0;
         _currentSpeed = enemyData.MoveSpeed;
+    }
+
+    private void Start()
+    {
+        string objectName = gameObject.name;
+        enemyData = Managers.Resource.Load<EnemyData>($"ScriptableObject/Enemy/{objectName}");
     }
 
     void Update()
@@ -49,8 +56,7 @@ public class Enemy : MonoBehaviour
     {
         if (_wavePointIndex >= WayPoints.points.Length - 1)
         {
-            // TODO: 플레이어 체력이 깎이는 사운드 and 효과
-            Managers.Game.EnemyDespawn(this);
+            Despawn();
             return;
         }
 
@@ -66,5 +72,11 @@ public class Enemy : MonoBehaviour
         Managers.Game.EnemyDespawn(this);
     }
 
-    
+    void Despawn()
+    {
+        // TODO: 플레이어 체력이 깎이는 사운드 and 효과
+        Managers.Game.EnemyDespawn(this);
+        Managers.Player.DamageHealth(enemyData.Damage);
+        Managers.Game.GameOver();
+    }
 }

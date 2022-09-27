@@ -138,5 +138,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeab6db15f380474bbb47832bafb4e96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  criticalHealthRatio: 0.3

@@ -16,3 +16,4 @@ MonoBehaviour:
   _maxHp: 10
   _moveSpeed: 4
   _money: 10
+  _damage: 1
