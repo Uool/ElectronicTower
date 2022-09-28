@@ -69,13 +69,10 @@ public class UI_Option : UI_Popup
             GetImage((int)EImage.FadeOutPanel).color = new Color(0, 0, 0, alpha);
             yield return null;
         }
-
-#if UNITY_ANDROID
-        Application.Quit();
-#endif
-
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
 #endif
     }
 }

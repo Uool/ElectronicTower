@@ -9,10 +9,11 @@ public class Projectile : MonoBehaviour
     private Transform _target;
     private Vector3 _originPos;
     private float _damage;
+    private float _speed = 30f;
 
     public GameObject impactEffect;
     public float explosionRadius;
-    public float speed = 10f;
+    
 
     public void OnEnable()
     {
@@ -40,7 +41,7 @@ public class Projectile : MonoBehaviour
         Quaternion rot = Quaternion.LookRotation(dir.normalized);
         transform.rotation = rot;
 
-        float distanceThisFrame = speed * Time.deltaTime;
+        float distanceThisFrame = _speed * Time.deltaTime;
 
         if (dir.magnitude <= distanceThisFrame)
         {

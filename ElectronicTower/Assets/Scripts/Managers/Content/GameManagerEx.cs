@@ -86,7 +86,15 @@ public class GameManagerEx
     public void GameOver()
     {
         if (Managers.Player.GameHealth <= 0)
-            Managers.UI.ShowPopupUI<UI_GameOver>();
+        {
+            UI_GameEnd gameEnd = Managers.UI.ShowPopupUI<UI_GameEnd>();
+            gameEnd.Setting(true);
+        }
+    }
+    public void GameClear()
+    {
+        UI_GameEnd gameEnd = Managers.UI.ShowPopupUI<UI_GameEnd>();
+        gameEnd.Setting(false);
     }
 
     public void Clear()

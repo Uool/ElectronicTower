@@ -42,6 +42,9 @@ public class EnemySpawner : MonoBehaviour
 
         Managers.Game.endWaveAction?.Invoke();
         _waveCount++;
+
+        if (_waveCount == _waveDataList.Count)
+            Managers.Game.GameClear();
     }
 
     void SpawnEnemy()

@@ -72,6 +72,8 @@ public class MainGameUI : UI_Scene
 
     void Update()
     {
+        KeyInput();
+
         if (GetObject((int)EGameObject.GameState).activeSelf == true)
         {
             // TODO: 웨이브 수 도 만들어야 함.
@@ -128,10 +130,16 @@ public class MainGameUI : UI_Scene
     #endregion
 
     #region ETC
+
+    void KeyInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+            Managers.UI.ShowPopupUI<UI_Option>();
+    }
+
     string CommaText(int number)
     {
         return string.Format("{0:#,###}", number);
     }
-
     #endregion
 }

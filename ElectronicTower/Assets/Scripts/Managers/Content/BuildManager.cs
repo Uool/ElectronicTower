@@ -93,4 +93,10 @@ public class BuildManager
 
     public TurretShopData GetTurretToBuild() { return _turretToBuild; }
     public void ClearTurretToBuild() { _turretToBuild = null; }
+
+    public void Clear()
+    {
+        _nodeUI = null;
+        buildEndAction = null;
+    }
 }

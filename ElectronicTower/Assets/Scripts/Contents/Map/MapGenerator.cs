@@ -43,7 +43,7 @@ public class MapGenerator : MonoBehaviour
 
     public int seed = 10;
 
-    private void Awake()
+    private void Start()
     {
         GenerateMap();
     }
