@@ -21,7 +21,6 @@ public abstract class Turret : MonoBehaviour
     private Vector3 _lineOriginPos = Vector3.zero;
 
     protected abstract void Shoot();
-
     public virtual void Init()
     {
         if (_lineRenderer == null)

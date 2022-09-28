@@ -10,6 +10,7 @@ public class Projectile : MonoBehaviour
     private Vector3 _originPos;
     private float _damage;
     private float _speed = 30f;
+    private Define.ETurretType _ownerType;
 
     public GameObject impactEffect;
     public float explosionRadius;
@@ -26,6 +27,8 @@ public class Projectile : MonoBehaviour
         _target = target;
         _originPos = originPos;
         _damage = damage;
+
+        _ownerType = _owner.GetComponent<Turret>().turretData.Type;
     }
 
     // Update is called once per frame
@@ -54,8 +57,7 @@ public class Projectile : MonoBehaviour
 
     void HitTarget()
     {
-        // TODO : ÀÌÆÑÆ® »ý¼º
-        //Managers.Resource.Instantiate();
+        Effect();
 
         if (explosionRadius > 0f)
         {
@@ -83,6 +85,31 @@ public class Projectile : MonoBehaviour
         }
     }
 
+    void Effect()
+    {
+        GameObject effect;
+        float destroyDelay = 0f;
+        switch (_ownerType)
+        {
+            case Define.ETurretType.MachineGun:
+                effect = Managers.Resource.Instantiate("Effect/BulletHit");
+                destroyDelay = 1f;
+                break;
+            case Define.ETurretType.Rocket:
+                effect = Managers.Resource.Instantiate("Effect/RocketExplosionPfx");
+                destroyDelay = 2.5f;
+                break;
+            default:
+                effect = null;
+                break;
+        }
+        if (null != effect)
+        {
+            effect.transform.position = transform.position;
+            Managers.Resource.Destroy(effect, destroyDelay);
+        }
+
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

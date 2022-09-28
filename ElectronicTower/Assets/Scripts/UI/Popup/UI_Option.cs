@@ -27,16 +27,22 @@ public class UI_Option : UI_Popup
     public override void Init()
     {
         base.Init();
+        Bind();
 
+        // TODO: 설정된 값을 저장하고 있어야 함.
+
+    }
+
+    void Bind()
+    {
         Bind<Slider>(typeof(ESlider));
+        Bind<Button>(typeof(EButton));
+        Bind<Image>(typeof(EImage));
+
         Get<Slider>((int)ESlider.BGMSlider).onValueChanged.AddListener(delegate { BGMSlider(); });
         Get<Slider>((int)ESlider.EffectSlider).onValueChanged.AddListener(delegate { EffectSlider(); });
-
-        Bind<Button>(typeof(EButton));
         BindEvent(GetButton((int)EButton.CloseBtn).gameObject, (PointerEventData data) => { ClosePopupUI(); });
         BindEvent(GetButton((int)EButton.QuitBtn).gameObject, (PointerEventData data) => { QuitGame(); });
-
-        Bind<Image>(typeof(EImage));
     }
 
     public override void ClosePopupUI()

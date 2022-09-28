@@ -26,11 +26,25 @@ public class SingleShotTurret : Turret
             projectile.Init(gameObject, target, firePoints[_fireCount].position, turretData.Damage);
         }
         // TODO : »ç¿îµå
+        PlaySound();
     }
 
     // Update is called once per frame
     void Update()
     {
         TurretUpdate();
+    }
+
+    void PlaySound()
+    {
+        switch (turretData.Type)
+        {
+            case Define.ETurretType.MachineGun:
+                Managers.Sound.Play("Turret/MachineGunShoot");
+                break;
+            case Define.ETurretType.Rocket:
+                Managers.Sound.Play("Turret/RocketShoot");
+                break;
+        }
     }
 }
