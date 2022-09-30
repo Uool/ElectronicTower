@@ -7,9 +7,8 @@ public class SoundManager
     AudioSource[] _audioSources = new AudioSource[(int)Define.ESound.MaxCount];
     Dictionary<string, AudioClip> _audioClips = new Dictionary<string, AudioClip>();
 
-    // MP3 Player   -> AudioSource
-    // MP3 음원     -> AudioClip
-    // 관객(귀)     -> AudioListener
+    public float bgmVolume = 0.5f;
+    public float effectVolume = 0.5f;
 
     public void Init()
     {
@@ -60,19 +59,31 @@ public class SoundManager
 
 			audioSource.pitch = pitch;
 			audioSource.clip = audioClip;
+            audioSource.volume = bgmVolume;
 			audioSource.Play();
 		}
 		else
 		{
 			AudioSource audioSource = _audioSources[(int)Define.ESound.Effect];
 			audioSource.pitch = pitch;
-			audioSource.PlayOneShot(audioClip);
+            audioSource.volume = effectVolume;
+            audioSource.PlayOneShot(audioClip);
 		}
 	}
 
     public void Volume(Define.ESound type, float volumeValue)
     {
+        switch (type)
+        {
+            case Define.ESound.Bgm:
+                bgmVolume = volumeValue;
+                break;
+            case Define.ESound.Effect:
+                effectVolume = volumeValue;
+                break;
+        }
         _audioSources[(int)type].volume = volumeValue;
+        //Debug.Log(_audioSources[(int)type].volume);
     }
 
 	AudioClip GetOrAddAudioClip(string path, Define.ESound type = Define.ESound.Effect)

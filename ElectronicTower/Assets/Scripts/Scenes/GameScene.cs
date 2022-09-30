@@ -17,6 +17,8 @@ public class GameScene : BaseScene
             _mapGenerator = FindObjectOfType<MapGenerator>();
 
         _mapGenerator.seed = Random.Range(1, 100);
+
+        Managers.Sound.Play("BGM/BGM_Game",Define.ESound.Bgm);
     }
 
     public override void Clear()

@@ -7,8 +7,7 @@ public class Define
     public enum EScene
     {
         Unknown,
-        Title,
-        StageSelect,
+        Intro,
         Game,
     }
 

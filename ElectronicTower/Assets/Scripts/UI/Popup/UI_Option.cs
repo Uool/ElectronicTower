@@ -29,8 +29,9 @@ public class UI_Option : UI_Popup
         base.Init();
         Bind();
 
-        // TODO: 설정된 값을 저장하고 있어야 함.
-
+        // TODO: 설정된 값을 저장하고 있어야 함
+        Get<Slider>((int)ESlider.BGMSlider).value = Managers.Sound.bgmVolume;
+        Get<Slider>((int)ESlider.EffectSlider).value = Managers.Sound.effectVolume;
     }
 
     void Bind()
@@ -53,10 +54,12 @@ public class UI_Option : UI_Popup
 
     void BGMSlider()
     {
+        Managers.Sound.bgmVolume = Get<Slider>((int)ESlider.BGMSlider).value;
         Managers.Sound.Volume(Define.ESound.Bgm, Get<Slider>((int)ESlider.BGMSlider).value);
     }
     void EffectSlider()
     {
+        Managers.Sound.effectVolume = Get<Slider>((int)ESlider.EffectSlider).value;
         Managers.Sound.Volume(Define.ESound.Effect, Get<Slider>((int)ESlider.EffectSlider).value);
     }
 
