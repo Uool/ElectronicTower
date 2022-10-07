@@ -168,9 +168,9 @@ MonoBehaviour:
   poleData: {fileID: 11400000, guid: 057afddcaf1763044a0a4eaca8fd646d, type: 2}
   electroLineTr: {fileID: 8903232855304967337}
   electroArea: {fileID: 2123308526551628274}
-  isLinked: 0
-  isSupplied: 0
   myNode: {fileID: 0}
+  originPos: {x: 0, y: 0, z: 0}
+  isSupplied: 0
 --- !u!114 &421303649256816976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -426,7 +426,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4188635514572642, guid: b020fb5c0d87f9a4c938bbc488714422, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3.84
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4188635514572642, guid: b020fb5c0d87f9a4c938bbc488714422, type: 3}
       propertyPath: m_LocalScale.y
@@ -434,7 +434,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4188635514572642, guid: b020fb5c0d87f9a4c938bbc488714422, type: 3}
       propertyPath: m_LocalScale.z
-      value: 3.46
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4188635514572642, guid: b020fb5c0d87f9a4c938bbc488714422, type: 3}
       propertyPath: m_LocalPosition.x

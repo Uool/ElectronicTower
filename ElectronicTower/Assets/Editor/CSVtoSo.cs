@@ -5,9 +5,11 @@ using System.IO;
 public class CSVtoSo
 {
     private static string _turretDataCSVPath = "/Editor/CSV/TurretData.csv";
+    private static string _powerPoleDataCSVPath = "/Editor/CSV/PowerPoleData.csv";
     private static string _turretShopDataCSVPath = "/Editor/CSV/TurretShopData.csv";
     private static string _enemyDataCSVPath = "/Editor/CSV/EnemyData.csv";
     private static string _waveDataCSVPath = "/Editor/CSV/WaveData.csv";
+
 
     [MenuItem("CSV/TurretData")]
     public static void GenerateTurretData()
@@ -21,6 +23,22 @@ public class CSVtoSo
             turretData.TurretDataInit(splitData);
 
             AssetDatabase.CreateAsset(turretData, $"Assets/Resources/ScriptableObject/Turret/{turretData.TurretName}.asset");
+        }
+        AssetDatabase.SaveAssets();
+    }
+
+    [MenuItem("CSV/TurretData")]
+    public static void GeneratePowerPoleData()
+    {
+        string[] allLines = File.ReadAllLines(Application.dataPath + _turretDataCSVPath);
+
+        for (int i = 1; i < allLines.Length; i++)
+        {
+            string[] splitData = allLines[i].Split(',');
+            PowerPoleData powerPoleData = ScriptableObject.CreateInstance<PowerPoleData>();
+            powerPoleData.PowerPoleDataInit(splitData);
+
+            AssetDatabase.CreateAsset(powerPoleData, $"Assets/Resources/ScriptableObject/Turret/{powerPoleData.TurretName}.asset");
         }
         AssetDatabase.SaveAssets();
     }

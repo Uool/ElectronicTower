@@ -12,7 +12,6 @@ public class PowerPole : MonoBehaviour
 
     private LineRenderer _lineRenderer;
     private List<Turret> _linkedTurret = new List<Turret>();
-    private List<PowerPole> _linkedPowerPole = new List<PowerPole>();
     private float _offsetHeight = 0.5f;
     private Vector3 _lineOriginPos = Vector3.zero;
 
@@ -34,6 +33,8 @@ public class PowerPole : MonoBehaviour
             _lineRenderer.SetPosition(0, myNode.TransformPoint(electroLineTr.position + Vector3.up * _offsetHeight));
             _lineRenderer.SetPosition(1, myNode.TransformPoint(electroLineTr.position + Vector3.up * _offsetHeight));
         }
+        float localScale = poleData.Radius * 2f;
+        electroArea.transform.localScale = new Vector3(localScale, 0.1f, localScale);
 
         originPos = myNode.position + new Vector3(0, myNode.position.y + _offsetHeight, 0);
         ActiveElectroArea(Managers.Game.isPowerPoleArea);
@@ -70,5 +71,10 @@ public class PowerPole : MonoBehaviour
     public void DisConnectedPowerPole()
     {
         _lineRenderer?.SetPosition(1, myNode.TransformPoint(electroLineTr.position));
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(transform.position, poleData.Radius);
     }
 }
