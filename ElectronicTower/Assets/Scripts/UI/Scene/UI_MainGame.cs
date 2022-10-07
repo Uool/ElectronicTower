@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class MainGameUI : UI_Scene
+public class UI_MainGame : UI_Scene
 {
     #region Enum
     public enum EButton
@@ -56,7 +56,7 @@ public class MainGameUI : UI_Scene
         Managers.Game.endWaveAction += EndWave;
     }
 
-    void BindUI()
+    protected override void BindUI()
     {
         Bind<Button>(typeof(EButton));
         Bind<GameObject>(typeof(EGameObject));

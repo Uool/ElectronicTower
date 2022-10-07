@@ -17,7 +17,7 @@ public class NodeUI : UI_Base
         gameObject.SetActive(false);
     }
 
-    void BindUI()
+    protected override void BindUI()
     {
         Bind<Button>(typeof(EButton));
         Bind<Text>(typeof(EText));

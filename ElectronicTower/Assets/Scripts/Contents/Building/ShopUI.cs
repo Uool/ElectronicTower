@@ -27,11 +27,9 @@ public class ShopUI : UI_Base
 
         Managers.Build.buildEndAction -= InactiveCancelBtn;
         Managers.Build.buildEndAction += InactiveCancelBtn;
-
-        // TODO: CSV 테이블로 ShopData 를 만들고, 그걸 바로 넣어주는 건 어떨까???
     }
 
-    void BindUI()
+    protected override void BindUI()
     {
         Bind<Button>(typeof(EButton));
         Bind<Text>(typeof(EText));
