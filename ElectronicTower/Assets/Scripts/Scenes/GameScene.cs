@@ -9,10 +9,11 @@ public class GameScene : BaseScene
     {
         base.Init();
         SceneType = Define.EScene.Game;
-        Managers.Build.Init();
-        Managers.Game.Init();
         Managers.UI.ShowSceneUI<UI_MainGame>();
         Managers.Resource.Instantiate($"UI/SubItem/UI_SceneFader");
+
+        Managers.Build.Init();
+        Managers.Game.Init();
         Managers.Sound.Play("BGM/BGM_Game", Define.ESound.Bgm);
 
         if (null == _mapGenerator)

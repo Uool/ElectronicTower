@@ -9,7 +9,6 @@ public class BuildManager
     private Define.ETurretType _turretType;
     private NodeUI _nodeUI;
 
-
     public UnityAction buildEndAction;
     public bool CanBuild { get { return _turretToBuild != null; }}
     public Define.ETurretType TurretType { get { return _turretType; } }
