@@ -68,7 +68,7 @@ public class MapGenerator : MonoBehaviour
 
         string holderName = "Generated Map";
         if (transform.Find(holderName))
-            DestroyImmediate(transform.Find(holderName).gameObject);
+            Destroy(transform.Find(holderName).gameObject);
 
         Transform mapHolder = new GameObject(holderName).transform;
         mapHolder.parent = transform;
@@ -288,15 +288,4 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    if (waypoints != null && waypoints.Length != 0)
-    //    {
-    //        for (int i = 0; i < waypoints.Length - 1; i++)
-    //        {
-    //            Gizmos.color = Color.red;
-    //            Gizmos.DrawLine(waypoints[i].position + Vector3.up * 0.5f, waypoints[i + 1].position + Vector3.up * 0.5f);
-    //        }
-    //    }            
-    //}
 }
