@@ -35,7 +35,6 @@ public abstract class Turret : MonoBehaviour
 
         originPos = myNode.position + new Vector3(0, myNode.position.y +_offsetHeight, 0);
         
-
         InvokeRepeating("UpdateTarget", 0f, 0.5f);
     }
 

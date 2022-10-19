@@ -82,7 +82,7 @@ public class MapGenerator : MonoBehaviour
                 Vector3 tilePosition = CoordToPosition(x, y);
                 Coord tileCoord = new Coord(x, y);
                 Tile newTile = Managers.Resource.Instantiate(tilePrefab.gameObject, tilePosition, Quaternion.Euler(Vector3.right * 90), mapHolder).GetComponent<Tile>();
-                //Tile newTile = Instantiate(tilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90), mapHolder).GetComponent<Tile>();
+
                 newTile.Init();
                 newTile.transform.localScale = Vector3.one * (1 - outlinePercent);
                 newTile.coord = tileCoord;
@@ -104,7 +104,6 @@ public class MapGenerator : MonoBehaviour
             {
                 Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
                 GameObject newObstacle = Managers.Resource.Instantiate(obstaclePrefab.gameObject, obstaclePosition + Vector3.up * 0.5f, Quaternion.identity, mapHolder);
-                //Transform newObstacle = Instantiate(obstaclePrefab, obstaclePosition + Vector3.up * 0.5f, Quaternion.identity, mapHolder) as Transform;
 
                 if (_tiles.ContainsKey(randomCoord))
                     _tiles[randomCoord].isObstcle = true;
@@ -141,8 +140,10 @@ public class MapGenerator : MonoBehaviour
                 {
                     int neighbourX = tile.x + x;
                     int neighbourY = tile.y + y;
+                    // 대각선은 체크하지 않도록.
                     if (x == 0 || y == 0)
                     {
+                        // 맵 밖으로 나가지 않게끔 체크
                         if (neighbourX >= 0 && neighbourX < obstacleMap.GetLength(0)
                             && neighbourY >= 0 && neighbourY < obstacleMap.GetLength(1))
                         {

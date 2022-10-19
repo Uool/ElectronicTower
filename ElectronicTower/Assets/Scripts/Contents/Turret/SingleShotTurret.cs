@@ -25,7 +25,7 @@ public class SingleShotTurret : Turret
             Projectile projectile = Managers.Resource.Instantiate(turretData.projectile, firePoints[_fireCount]).GetComponent<Projectile>();
             projectile.Init(gameObject, target, firePoints[_fireCount].position, turretData.Damage);
         }
-        // TODO : »ç¿îµå
+
         PlaySound();
     }
 
